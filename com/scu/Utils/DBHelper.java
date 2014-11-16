@@ -1,6 +1,9 @@
 package com.scu.Utils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -20,15 +23,15 @@ public class DBHelper {
 	private Connection conn = null;
 	private Statement stmt = null;
 	private ResultSet rs = null;
-
+	public DBHelper()
+	{
+		setDBUrl();
+	}
 	public void conn() {
 		try {
 			Class.forName(DBDriverClass);
-
-			this.conn = DriverManager.getConnection(this.DBUrl);
-
+			this.conn = DriverManager.getConnection(DBUrl);
 			this.stmt = this.conn.createStatement();
-			
 		//	System.out.println("连接数据库成功");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -36,11 +39,6 @@ public class DBHelper {
 			e.printStackTrace();
 		}
 	}
-//
-//	public DBHelper()
-//	{
-//		conn();
-//	}
 	public void close() {
 		try {
 			this.stmt.close();
@@ -48,7 +46,6 @@ public class DBHelper {
 		} catch (Exception localException) {
 		}
 	}
-
 	public ResultSet Query(String tableName, String condition, String cols) {
 		try {
 			String sql = "select " + cols + " from " + tableName;
@@ -71,6 +68,28 @@ public class DBHelper {
 		return this.rs;
 	}
 
+	public String getDBUrl() {
+		//构造函数中初始化信号源
+		
+		return DBUrl;
+	}
+	public void setDBUrl() {
+		String fileName="./signalSource.config";
+		String sourceSource="";
+		try {
+			BufferedReader br=new BufferedReader(new FileReader(fileName));
+			String line=br.readLine();
+			line=br.readLine();
+			int beginIndex=line.indexOf("\"");
+			int endIndex=line.lastIndexOf("\"");
+			sourceSource=line.substring(beginIndex+1, endIndex);
+			DBUrl="jdbc:odbc:"+sourceSource.trim();
+			System.out.println("DBUrl------------>:"+DBUrl);
+			br.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	}
 	public int QueryCnt(String tableName, String condition) {
 		int cnt = 0;
 		try {
