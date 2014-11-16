@@ -111,10 +111,8 @@ public class SignalReaderThread extends Thread {
 		else if (code.equalsIgnoreCase(Signal.RIGHTLAMP))
 			lampPlusThread.status = 2;
 		else if (code.equalsIgnoreCase(Signal.WARNINGLIGHT))
-		{
-			js.lamp_urgent = true;
+//			js.lamp_urgent = true;
 			lampPlusThread.status = 3;
-		}
 		else if (code.equalsIgnoreCase(Signal.FOOTBRAKEOFF))
 			js.signal_footbrake = false;
 		else if (code.equalsIgnoreCase(Signal.FOOTBRAKEON))
@@ -132,7 +130,7 @@ public class SignalReaderThread extends Thread {
 		else if (code.equalsIgnoreCase(Signal.HOOTER))
 			js.signal_horn = true;
 		else if (code.equalsIgnoreCase(Signal.OFF))
-			js.signal_ignition = false;
+			js.signal_off = true;
 		else if (code.equalsIgnoreCase(Signal.SEATBELT))
 //			js.signal_seatbelt = false;
 			lampPlusThread.seltStatus = 1;
@@ -162,8 +160,9 @@ public class SignalReaderThread extends Thread {
 	public void clear() {
 		// js.lamp_left = false;
 		// js.lamp_right = false;
-		js.lamp_urgent = false;
+//		js.lamp_urgent = false;
 		// js.lamp_width = false;
+		js.signal_off = false;
 		js.signal_deputybrake = false;
 		js.signal_frontbumper = false;
 		js.signal_rearbumper = false;
@@ -263,20 +262,14 @@ class LampPlusThread extends Thread {
 			}
 			break;
 		case 3:
-			js.lamp_left = true;
-			js.lamp_right = true;
 			js.lamp_urgent = true;
 			if (startLampTime == 0)
 				startLampTime = System.currentTimeMillis();
 			endLampTime = System.currentTimeMillis();
 			if (endLampTime - startLampTime <= 250) {
-				js.lamp_left = true;
-				js.lamp_right = true;
 				js.lamp_urgent = true;
 			} else {
 				startLampTime = endLampTime = 0L;
-				js.lamp_left = false;
-				js.lamp_right = false;
 				js.lamp_urgent = false;
 				status = 0;
 			}

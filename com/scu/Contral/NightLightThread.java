@@ -35,6 +35,7 @@ public class NightLightThread extends ModuleThread implements
 	private Player player;
 	/* 等待时间，多长时间开启什么灯 */
 	private int waitTime = 5000;
+	private int highbeamCount=0;
 	public NightLightThread(ExamWindow window, int moduleFlag) {
 		super(window, moduleFlag);
 		this.mp3rootpath = "./mp3/";
@@ -123,6 +124,7 @@ public class NightLightThread extends ModuleThread implements
 					}
 					this.canRead = false;
 					judge();
+					this.highbeamCount = 0;//自动清零计数器
 				} catch (Exception e) {
 					e.printStackTrace();
 					break;
@@ -140,8 +142,14 @@ public class NightLightThread extends ModuleThread implements
 		this.lastCarSignal = carSignal;
 		if (this.canRead)
 			if (this.curCarSignal != null)
-				// 调用add方法
+			{
 				add(this.curCarSignal, this.lastCarSignal);
+				if(this.lastCarSignal.lamp_highbeam)
+				{
+					this.highbeamCount++;
+					this.lastCarSignal.lamp_urgent=false;
+				}
+			}
 			else
 				this.curCarSignal = JudgeSignal.getInstance().creatNew();
 	}
@@ -157,7 +165,7 @@ public class NightLightThread extends ModuleThread implements
 		cur.signal_clutchpedal |= last.signal_clutchpedal;
 	}
 
-	/*     */
+	/*   true 表示都关闭 false表示有灯没关  */
 	private boolean allLightDown(JudgeSignal carSignal) {
 		boolean isAllDown = true;
 		if (carSignal != null) {
@@ -169,146 +177,70 @@ public class NightLightThread extends ModuleThread implements
 	}
 
 	public void judge() {
-		if ((this.curCarSignal == null) || (this.lastCarSignal == null)) {
-			/* 不能正确�?��灯光 */
-			sendMessage("41601", 41);
-			return;
-		}
 		switch (this.curId) {
-		case 1://�?��灯光考试
+		case 1://灯光考试
+			if ((this.curCarSignal == null) || (this.lastCarSignal == null)) {
+				/* 不能正确使用灯光 */
+				sendMessage("41601", 41);
+			}
+			else
+			{
+				if(!this.curCarSignal.lamp_near)
+				{
+					sendMessage("41601", 41);
+				}
+			}
 			break;
 		case 2://低能见度道路
-			if (!this.lastCarSignal.lamp_near) {
-				/* /* 不能正确�?��灯光 */
-				sendMessage("41601", 41);
-			} else {/*???????*/
-				if (!this.lastCarSignal.lamp_highbeam)
-					break;
+			if (!this.lastCarSignal.lamp_highbeam) {
 				sendMessage("41609", 13);
 			}
 			break;
 		case 3://夜间会车
-			if (allLightDown(this.lastCarSignal)) {
-				sendMessage("41601", 41);
-			} else {
-				if ((this.lastCarSignal.lamp_near)
-						&& (!this.lastCarSignal.lamp_highbeam))
-					break;
-				/* 会车时不按规定使用近光灯 */sendMessage("41604", 13);
-			}
-			break;
-		case 4://路口转弯
-			if (allLightDown(this.lastCarSignal)) {
-				sendMessage("41601", 41);
-			} else {
-				if ((this.lastCarSignal.lamp_near)
-						&& (!this.lastCarSignal.lamp_highbeam))
-					break;
-				sendMessage("41603", 13);
-			}
-			break;
-		case 5://夜间通过人行横道
-			if (allLightDown(this.lastCarSignal)) {
-				sendMessage("41601", 41);
-			} else {
-				if ((this.lastCarSignal.lamp_near)
-						&& (!this.lastCarSignal.lamp_highbeam))
-					break;
-				sendMessage("41604", 13);
-			}
-			break;
-		case 6://夜间通过急弯
-			if (allLightDown(this.lastCarSignal)) {
-				sendMessage("41601", 41);
-			} else {
-				if ((this.curCarSignal.lamp_highbeam)
-						&& (this.curCarSignal.lamp_near)
-						&& (this.lastCarSignal.lamp_near))
-					break;
-				/*
-				 * markdepend 通过急弯、坡路�?拱桥、人行横道或者没有交通信号灯控制的路口时，不交替使用远近光灯示意
-				 */
-				sendMessage("41603", 13);
-			}
-			break;
-		case 7://夜间通过拱桥
-			if (allLightDown(this.lastCarSignal)) {
-				sendMessage("41601", 41);
-			} else {
-				if ((this.curCarSignal.lamp_highbeam)
-						&& (this.curCarSignal.lamp_near)
-						&& (this.lastCarSignal.lamp_near))
-					break;
-				sendMessage("41603", 13);
-			}
-			break;
-		case 8://夜间通过坡路
-			if (allLightDown(this.lastCarSignal)) {
-				sendMessage("41601", 41);
-			} else {
-				if ((this.curCarSignal.lamp_highbeam)
-						&& (this.curCarSignal.lamp_near)
-						&& (this.lastCarSignal.lamp_near))
-					break;
-				sendMessage("41603", 13);
-			}
-			break;
-		case 9://通过路口
-			if (allLightDown(this.lastCarSignal)) {
-				sendMessage("41601", 41);
-			} else {
-				if ((this.lastCarSignal.lamp_width)
-						&& (this.curCarSignal.lamp_left)
-						&& (this.curCarSignal.lamp_right))
-					break;
-				/* 在路边临时停车不关闭前照灯或不开启示廓灯 */
-				sendMessage("41603", 13);
-			}
-			break;
-		case 10://夜间超车
-			if (allLightDown(this.lastCarSignal)) {
-				sendMessage("41601", 41);
-			} else {
-				if ((this.lastCarSignal.lamp_width)
-						&& (this.curCarSignal.lamp_left)
-						&& (this.curCarSignal.lamp_right)
-						&& (this.curCarSignal.lamp_fog))
-					break;
-				sendMessage("41606", 13);
-			}
-			break;
-		case 11://照明不良
-			if (allLightDown(this.lastCarSignal)) {
-				sendMessage("41601", 41);
-			} else {
-				if ((this.curCarSignal.lamp_highbeam)
-						&& (this.curCarSignal.lamp_near)
-						&& (this.lastCarSignal.lamp_near))
-					break;
-				/* 超车时未交替使用远近光灯提醒被超越车�?*/
+			if (!this.lastCarSignal.lamp_near) {
 				sendMessage("41609", 13);
 			}
 			break;
-		case 12://考试完成
-			if (allLightDown(this.lastCarSignal)) {
-				sendMessage("41601", 41);
-			} else {
-				if (this.lastCarSignal.lamp_highbeam)
-					break;
-				sendMessage("41601", 41);
-			}
+		case 4://路口转弯
+			judgeDooubleSwitch();
 			break;
-		case 13:
-			if ((!this.lastCarSignal.lamp_near)
-					&& (!this.lastCarSignal.lamp_highbeam)
-					&& (!this.lastCarSignal.lamp_left)
-					&& (!this.lastCarSignal.lamp_right)
-					&& (!this.lastCarSignal.lamp_width)
-					&& (!this.lastCarSignal.lamp_fog))
-				break;
-			/* 不安考试员指令驾�?*/
-			sendMessage("30103", 41);
+		case 5://夜间通过人行横道
+			judgeDooubleSwitch();
+			break;
+		case 6://夜间通过急弯
+			judgeDooubleSwitch();
+			break;
+		case 7://夜间通过拱桥
+			judgeDooubleSwitch();
+			break;
+		case 8://夜间通过坡路
+			judgeDooubleSwitch();
+			break;
+		case 9://通过路口
+			judgeDooubleSwitch();
+			break;
+		case 10://夜间超车
+			judgeDooubleSwitch();
+			break;
+		case 11://考试完成
+			if (!allLightDown(this.lastCarSignal)) {
+				sendMessage("41601", 41);
+			} 
+			break;
+		case 12://照明不良
+			if (!this.lastCarSignal.lamp_highbeam)
+				sendMessage("41601", 41);
 			break;
 		}
+	}
+	/**
+	 * 判断双闪
+	 */
+	public void judgeDooubleSwitch()
+	{
+		if (this.highbeamCount<2) {
+			sendMessage("41609", 13);
+		}
+		this.highbeamCount=0;
 	}
 }

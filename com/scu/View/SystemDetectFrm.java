@@ -51,7 +51,7 @@ public class SystemDetectFrm extends JFrame {
 	JLabel lab_signal_handbrake= new JLabel("");
 	JLabel lab_signal_horn= new JLabel("");
 	JLabel lab_signal_acc= new JLabel("");
-	JLabel lab_signal_ignition= new JLabel("");
+	JLabel lab_signal_off= new JLabel("");
 	JLabel lab_signal_carsidea= new JLabel("");
 	JLabel lab_signal_carsideb= new JLabel("");
 	JLabel lab_signal_wheelangle;
@@ -174,7 +174,7 @@ public class SystemDetectFrm extends JFrame {
 		JPanelUtils.compCombine(midPanel, this.lab_lamp_brake, "½Å   É²", allImage.getSwitchcloseIcon(), rect, font);
 		JPanelUtils.compCombine(midPanel, this.lab_signal_rightbrake, "¸±½ÅÉ²", allImage.getSwitchcloseIcon(), rect, font);
 		JPanelUtils.compCombine(midPanel, this.lab_signal_acc, " ACC ", allImage.getSwitchcloseIcon(), rect, font);
-		JPanelUtils.compCombine(midPanel, this.lab_signal_ignition, "µã   »ð", allImage.getSwitchcloseIcon(), rect, font);
+		JPanelUtils.compCombine(midPanel, this.lab_signal_off, "Ï¨   »ð", allImage.getSwitchcloseIcon(), rect, font);
 		JPanelUtils.compCombine(midPanel, this.lab_signal_horn, "À®   °È", allImage.getSwitchcloseIcon(), rect, font);
 		JPanelUtils.compCombine(midPanel, this.lab_signal_clutchpedal, "ÀëºÏÆ÷", allImage.getSwitchcloseIcon(), rect, font);
 		JPanelUtils.compCombine(midPanel, this.lab_signal_carsidea, "ÈÆÇ°µã", allImage.getSwitchcloseIcon(), rect, font);
@@ -468,11 +468,11 @@ public class SystemDetectFrm extends JFrame {
 					SystemDetectFrm.this.lab_signal_acc
 							.setIcon(ConfigManager.allImage
 									.getSwitchcloseIcon());
-				if (carSignal.signal_ignition)
-					SystemDetectFrm.this.lab_signal_ignition
+				if (carSignal.signal_off)
+					SystemDetectFrm.this.lab_signal_off
 							.setIcon(ConfigManager.allImage.getSwithopenIcon());
 				else
-					SystemDetectFrm.this.lab_signal_ignition
+					SystemDetectFrm.this.lab_signal_off
 							.setIcon(ConfigManager.allImage
 									.getSwitchcloseIcon());
 				if (carSignal.signal_frontbumper)

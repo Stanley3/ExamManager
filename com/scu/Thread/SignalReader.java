@@ -85,9 +85,9 @@ public class SignalReader extends Thread {
 			// }
 			try {
 				// System.out.println("接收线程开始阻塞20s");
-				Thread.sleep(5000);
+				Thread.sleep(3000);  
 				if (this.readerThread != null)
-					this.readerThread.clear(); // 两秒后清楚不能关闭的信号
+					this.readerThread.clear(); // 三秒后清楚不能关闭的信号
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

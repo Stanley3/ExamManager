@@ -86,9 +86,9 @@ public class JudgeSignal
     */
    public boolean signal_horn = false;
    /**
-    * 点火信号，true表示车辆启动，false表示车辆熄火
+    * 熄火信号，false表示车辆启动，true表示车辆熄火
     */
-   public boolean signal_ignition = false;
+   public boolean signal_off = false;
    /**
     * 车辆加速器信号，暂获取不到该信号，默认为true
     */

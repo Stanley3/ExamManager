@@ -1230,7 +1230,7 @@ public class RoutineTrainingFrm extends ExamWindow {
 					RoutineTrainingFrm.this.lab_signal_acc
 							.setIcon(ConfigManager.allImage
 									.getSwitchcloseIcon());
-				if (carSignal.signal_ignition)
+				if (carSignal.signal_off)
 					RoutineTrainingFrm.this.lab_signal_ignition
 							.setIcon(ConfigManager.allImage.getSwithopenIcon());
 				else
