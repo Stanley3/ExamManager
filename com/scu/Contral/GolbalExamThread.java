@@ -209,32 +209,36 @@ public class GolbalExamThread extends ModuleThread {
 				this.turnLight3S = true;
 				this.turnLight3SEndTime = System.currentTimeMillis();
 			}
-		} else {// 左右转向灯均未开�?
+		} 
+		else 
+		{
+			// 左右转向灯均未开�?
 			this.turnlightOffStartTime += 200L;// 关灯时间，如果关灯时间大�?秒，则初始化�?��时间
-			if (this.turnlightOffStartTime > ConfigManager.addClass
-					.getLightOffTime())
+			if (this.turnlightOffStartTime > ConfigManager.addClass.getLightOffTime())
 				this.turnLightTime = 0;
 			else {
 				this.turnLightTime += 200L;
 			}
-			/**/
-			if (this.turnlightOffStartTime >= 10000L) {
+			//--------------------------------------------------------
+			if (this.turnlightOffStartTime >=  ConfigManager.commonConfig.getCARPARM_GOLBAL_ZDDBGBJL()) {
+				sendMessage("30206", 20);
 				this.turnLight3S = false;
 			}
 		}
-		//如果打左转向灯结束时间时间大�?5秒，并且角度发生了变化就更新当前角度
-		if (this.carSignal != null && (int) this.carSignal.gpsspeed > 0
-				&& (Math.abs(this.carSignal.gpsangle - this.satrtAngle) >= ConfigManager.changeLane
-						.getOffsetAngle())) {
-			if(this.turnLight3SEndTime<15000L)
-			{
-				this.satrtAngle=this.carSignal.gpsangle;
-			}
-			else
-			{
-				sendMessage("30206", 20);
-			}
-		}
+		//-----------------------------------------------------------
+		/*如果打左转向灯结束时间时间大�?5秒，并且角度发生了变化就更新当前角度*/
+//		if (this.carSignal != null && (int) this.carSignal.gpsspeed > 0
+//				&& (Math.abs(this.carSignal.gpsangle - this.satrtAngle) >= ConfigManager.changeLane
+//						.getOffsetAngle())) {
+//			if(this.turnLight3SEndTime<15000L)
+//			{
+//				this.satrtAngle=this.carSignal.gpsangle;
+//			}
+//			else
+//			{
+//				sendMessage("30206", 20);
+//			}
+//		}
 		// 档位发生了变�?
 		/* 难道变档�?��时间信号和现实不同步 */
 		if (this.curGear != this.carSignal.gear) {
