@@ -2,6 +2,7 @@ package com.scu.View;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -74,6 +75,10 @@ public class ExamFrm extends ExamWindow {
 	JLabel lb_km_15;
 	JLabel lb_km_16;
 
+	JLabel gps;
+	JLabel wl;
+	JLabel dw;
+	JLabel xh;
 	JLabel aqdbd;
 	JLabel fss;
 	JLabel hldg;
@@ -89,8 +94,11 @@ public class ExamFrm extends ExamWindow {
 	JLabel zzxg;
 
 	JButton ksks;
+	JButton cxks;
+	
 	JButton jsks;
-	JButton dycj;
+	JButton ykkq;
+	JButton mndg;
 
 	JLabel lb_score;
 	JLabel lb_startime;
@@ -109,19 +117,22 @@ public class ExamFrm extends ExamWindow {
 	private ArrayList<HashMap<String, Object>> listData = new ArrayList<HashMap<String, Object>>();
 
 	private ArrayList<CheckPoint> listPoint = new ArrayList<CheckPoint>();
-	Font font = new Font("黑体", Font.BOLD, 15);
+	Font font = new Font("宋体", Font.PLAIN, 14);
 
 	private TimerTickThread timerTickThread = null;
 	private UIThread uiThread = null;
 	TimerThread timeThread = new TimerThread();
-	// PrepareThread prepareThread = null;
+    PrepareThread prepareThread = null;
 	public GolbalExamThread golbalExamThread = null;
+	 NightLightThread nightLightThread = null;
 
 	public ExamFrm(String winName) {
 		this.init();
 	}
 
 	private void init() {
+		// 将数据库中线路对应的点加载到 listPoint中
+		initPoint();
 		JPanel contentPanel = (JPanel) this.getContentPane();
 		this.setUndecorated(true);
 		this.setForeground(new Color(185, 194, 203));
@@ -133,8 +144,7 @@ public class ExamFrm extends ExamWindow {
 		this.setResizable(false);
 		// 设置窗口的布局方式为null
 		contentPanel.setLayout(null);
-		// 将数据库中线路对应的点加载到 listPoint中
-		initPoint();
+		
 		// System.out.println(this.listPoint);
 		ConfigManager.EXAMSTARTTIME = this.timeFormat.format(Calendar
 				.getInstance().getTime());
@@ -143,20 +153,21 @@ public class ExamFrm extends ExamWindow {
 		headPanel.setBounds(0, 0, WIDTH, 50);
 		contentPanel.add(headPanel);
 		JLabel examCharacter = new JLabel(new ImageIcon(
-				"images\\mnks\\toptitle.jpg"));
+				"images\\mnks\\toptitle.png"));
 
 		headPanel.add(examCharacter);
 
 		JPanel topPanel = new JPanel();
-		topPanel.setBounds(0, headPanel.getHeight() + 1, WIDTH, 250);
+		//第二次修改界面布局    
+		topPanel.setBounds(0, headPanel.getHeight() + 1, WIDTH, 300);
 		topPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		contentPanel.add(topPanel);
 
 		JPanel titlePane = new JPanel();
-		titlePane.setBackground(new Color(83, 105, 128));
+		titlePane.setBackground(Color.WHITE);
 		topPanel.add(titlePane);
 		titlePane.setPreferredSize(new Dimension(titlePane.getParent()
-				.getWidth(), 30));
+				.getWidth(), 29));
 		GridBagLayout gridBageLayout = new GridBagLayout();
 		gridBageLayout.columnWidths = new int[] { 100, 60 };
 		gridBageLayout.columnWeights = new double[] { 0.0D, 0.0D, 1.0D };
@@ -166,7 +177,7 @@ public class ExamFrm extends ExamWindow {
 		JLabel newLabel1 = new JLabel("扣分项目");
 		newLabel1.setHorizontalAlignment(JLabel.CENTER);
 		newLabel1.setForeground(Color.BLACK);
-		newLabel1.setFont(font);
+		newLabel1.setFont(new Font("黑体", Font.BOLD, 15));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel.gridx = 0;
@@ -177,7 +188,7 @@ public class ExamFrm extends ExamWindow {
 		JLabel newLabel2 = new JLabel("扣分");
 		newLabel2.setHorizontalAlignment(JLabel.CENTER);
 		newLabel2.setForeground(Color.BLACK);
-		newLabel2.setFont(font);
+		newLabel2.setFont(new Font("黑体", Font.BOLD, 15));
 		GridBagConstraints gbc_label_9 = new GridBagConstraints();
 		gbc_label_9.fill = GridBagConstraints.HORIZONTAL;
 		gbc_label_9.gridx = 1;
@@ -187,24 +198,32 @@ public class ExamFrm extends ExamWindow {
 		JLabel newLabel3 = new JLabel("扣分原因");
 		newLabel3.setHorizontalAlignment(JLabel.CENTER);
 		newLabel3.setForeground(Color.BLACK);
-		newLabel3.setFont(font);
+		newLabel3.setFont(new Font("黑体", Font.BOLD, 15));
 		GridBagConstraints gbc_label_10 = new GridBagConstraints();
 		gbc_label_10.insets = new Insets(0, 0, 5, 0);
 		gbc_label_10.fill = GridBagConstraints.HORIZONTAL;
 		gbc_label_10.gridx = 2;
 		gbc_label_10.gridy = 0;
 		titlePane.add(newLabel3, gbc_label_10);
+		
+		JPanel emptyPanel1 = new JPanel();
+//		emptyPanel1.setBounds(0, headPanel.getHeight() + topPanel.getHeight() + 1,
+//				WIDTH, 1);
+		emptyPanel1.setPreferredSize(new Dimension(WIDTH, 1));
+		emptyPanel1.setBorder(BorderFactory.createLineBorder(new Color(12, 97, 159)));
+		topPanel.add(emptyPanel1);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setOpaque(false);
 		topPanel.add(scrollPane);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		scrollPane.getViewport().setBackground(Color.WHITE);
 		scrollPane.setPreferredSize(new Dimension(scrollPane.getParent()
-				.getWidth(), topPanel.getHeight() - 30));
+				.getWidth(), topPanel.getHeight() - 31));
 
 		this.errList = new Vector();
 		this.errModel = new MyErrorTableModel(this.errList);
 		this.errTable = new MyErrorTable(this.errModel);
-		// this.errModel.addRow("准备错误", -10, "不按规定准备");
 
 		this.errTable.hideHeader();
 		this.errTable.setFont(font);
@@ -214,26 +233,25 @@ public class ExamFrm extends ExamWindow {
 		this.errTable.setColumnWidth(1, 60);
 		this.errTable.setColumnWidth(2, titlePane.getParent().getWidth() - 160);
 		scrollPane.setViewportView(this.errTable);
+		
+		//加入蓝色的线
+		JPanel emptyPanel2 = new JPanel();
+		emptyPanel2.setPreferredSize(new Dimension(WIDTH, 1));
+		emptyPanel2.setBorder(BorderFactory.createLineBorder(new Color(12, 97, 159)));
+		topPanel.add(emptyPanel2);
 
-		JPanel midPanel = new JPanel() {
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				g.drawImage(new ImageIcon("images\\mnks\\chengjititle.jpg")
-						.getImage(), 0, 0, this.getWidth(), this.getHeight(),
-						this);
-			}
-		};
+		JPanel midPanel = new JPanel();
+		midPanel.setBackground(Color.WHITE);
 		midPanel.setBounds(0, headPanel.getHeight() + topPanel.getHeight() + 1,
-				WIDTH, 40);
+				WIDTH, 55);
 		contentPanel.add(midPanel);
 		// 指示信号面板
-		midPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 13, 2));
-		JLabel ksxmlb = new JLabel("考试项目列表");
-		ksxmlb.setHorizontalAlignment(JLabel.CENTER);
-		ksxmlb.setFont(new Font("黑体", 1, 18));
-		ksxmlb.setForeground(Color.BLACK);
-		midPanel.add(ksxmlb);
+		midPanel.setLayout(new GridLayout(1, 0, 0, 0));
+		gps = new JLabel(signalIcon.getGpsgIcon());
+		dw = new JLabel(signalIcon.getDkIcon());
+		wl = new JLabel(signalIcon.getWlgIcon());
+		xh = new JLabel(signalIcon.getXhgIcon());
+		
 
 		aqdbd = new JLabel(signalIcon.getAqdbdIcon());
 		fss = new JLabel(signalIcon.getFssIcon());
@@ -245,46 +263,59 @@ public class ExamFrm extends ExamWindow {
 		sss = new JLabel(signalIcon.getSssIcon());
 		wdg = new JLabel(signalIcon.getWdgIcon());
 		yjdg = new JLabel(signalIcon.getYjdgIcon());
-		yzxg = new JLabel(signalIcon.getYgdgIcon());
+		yzxg = new JLabel(signalIcon.getYzxgIcon());
 		ygdg = new JLabel(signalIcon.getYgdgIcon());
 		zzxg = new JLabel(signalIcon.getZzxgIcon());
 
-		midPanel.add(aqdbd);
-		midPanel.add(fss);
-		midPanel.add(hldg);
-		midPanel.add(jss);
-		midPanel.add(jgdg);
-		midPanel.add(lbs);
-		midPanel.add(qldg);
-		midPanel.add(sss);
-		midPanel.add(wdg);
-		midPanel.add(yjdg);
-		midPanel.add(yzxg);
-		midPanel.add(ygdg);
+		midPanel.add(gps);
+		midPanel.add(wl);
+		midPanel.add(dw);
+		midPanel.add(xh);
 		midPanel.add(zzxg);
-
+		midPanel.add(yzxg);
+		midPanel.add(yjdg);
+		midPanel.add(jgdg);
+		midPanel.add(ygdg);
+		midPanel.add(wdg);
+		midPanel.add(jss);
+		midPanel.add(sss);
+		midPanel.add(fss);
+		midPanel.add(qldg);
+		midPanel.add(hldg);
+		midPanel.add(lbs);
+		midPanel.add(aqdbd);
+		
+		
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setBounds(0, headPanel.getHeight() + topPanel.getHeight()
 				+ midPanel.getHeight() + 1, WIDTH,
 				HEIGHT - headPanel.getHeight() - topPanel.getHeight()
-						- midPanel.getHeight() - 20);
-		// bottomPanel.setBackground(new Color(83, 105, 128));
+						- midPanel.getHeight());
+		bottomPanel.setBackground(new Color(182, 196, 211));
 		contentPanel.add(bottomPanel);
 
 		bottomPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		//加入蓝色分割线
+		JPanel emptyPanel3 = new JPanel();
+		emptyPanel3.setPreferredSize(new Dimension(WIDTH, 1));
+		emptyPanel3.setBorder(BorderFactory.createLineBorder(new Color(12, 97, 159)));
+		bottomPanel.add(emptyPanel3);
+		
+		
 		JPanel left = new JPanel();
+		left.setBackground(new Color(182, 196, 211));
 		left.setOpaque(false);
-		left.setPreferredSize(new Dimension(450, bottomPanel.getHeight()));
+		left.setPreferredSize(new Dimension(380, bottomPanel.getHeight()));
 		left.setBorder(BorderFactory.createEmptyBorder(10, 3, 20, 0));
 		bottomPanel.add(left);
-		left.setLayout(new GridLayout(6, 3, 0, 0));
+		left.setLayout(new GridLayout(4, 4, 0, 0));
 
 		// JPanelUtils.addItem(left, lb_km_1, "images\\mnks\\sczb3.jpg");
 
-		ImageIcon icon1 = new ImageIcon("images\\mnks\\sczb3.jpg");
+		ImageIcon icon1 = ConfigManager.simuteIcon.getSczb0Icon();
 		JPanel panel1 = new JPanel();
-		panel1.setBorder(BorderFactory
-				.createLineBorder(new Color(195, 201, 212)));
+//		panel1.setBorder(BorderFactory
+//				.createLineBorder(new Color(195, 201, 212)));
 		panel1.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 0));
 		panel1.setOpaque(false);
 		left.add(panel1);
@@ -292,10 +323,10 @@ public class ExamFrm extends ExamWindow {
 		panel1.add(lb_km_1);
 
 		// JPanelUtils.addItem(left, lb_km_7, "images\\mnks\\lkzx3.jpg");
-		ImageIcon icon2 = new ImageIcon("images\\mnks\\lkzx3.jpg");
+		ImageIcon icon2 = ConfigManager.simuteIcon.getLkzx0Icon();
 		JPanel panel2 = new JPanel();
-		panel2.setBorder(BorderFactory
-				.createLineBorder(new Color(195, 201, 212)));
+//		panel2.setBorder(BorderFactory
+//				.createLineBorder(new Color(195, 201, 212)));
 		panel2.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 0));
 		panel2.setOpaque(false);
 		left.add(panel2);
@@ -303,10 +334,10 @@ public class ExamFrm extends ExamWindow {
 		panel2.add(lb_km_7);
 
 		// JPanelUtils.addItem(left, lb_km_13, "images\\mnks\\hc3.jpg");
-		ImageIcon icon3 = new ImageIcon("images\\mnks\\hc3.jpg");
+		ImageIcon icon3 = ConfigManager.simuteIcon.getHc0Icon();
 		JPanel panel3 = new JPanel();
-		panel3.setBorder(BorderFactory
-				.createLineBorder(new Color(195, 201, 212)));
+//		panel3.setBorder(BorderFactory
+//				.createLineBorder(new Color(195, 201, 212)));
 		panel3.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 0));
 		panel3.setOpaque(false);
 		left.add(panel3);
@@ -314,10 +345,10 @@ public class ExamFrm extends ExamWindow {
 		panel3.add(lb_km_13);
 
 		// JPanelUtils.addItem(left, lb_km_2, "images\\mnks\\qb3.jpg");
-		ImageIcon icon4 = new ImageIcon("images\\mnks\\qb3.jpg");
+		ImageIcon icon4 = ConfigManager.simuteIcon.getQb0Icon();
 		JPanel panel4 = new JPanel();
-		panel4.setBorder(BorderFactory
-				.createLineBorder(new Color(195, 201, 212)));
+//		panel4.setBorder(BorderFactory
+//				.createLineBorder(new Color(195, 201, 212)));
 		panel4.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 0));
 		panel4.setOpaque(false);
 		left.add(panel4);
@@ -325,10 +356,10 @@ public class ExamFrm extends ExamWindow {
 		panel4.add(lb_km_2);
 
 		// JPanelUtils.addItem(left, lb_km_8, "images\\mnks\\lkzz3.jpg");
-		ImageIcon icon5 = new ImageIcon("images\\mnks\\lkzz3.jpg");
+		ImageIcon icon5 = ConfigManager.simuteIcon.getLkzz0Icon();
 		JPanel panel5 = new JPanel();
-		panel5.setBorder(BorderFactory
-				.createLineBorder(new Color(195, 201, 212)));
+//		panel5.setBorder(BorderFactory
+//				.createLineBorder(new Color(195, 201, 212)));
 		panel5.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 0));
 		panel5.setOpaque(false);
 		left.add(panel5);
@@ -336,10 +367,10 @@ public class ExamFrm extends ExamWindow {
 		panel5.add(lb_km_8);
 
 		// JPanelUtils.addItem(left, lb_km_14, "images\\mnks\\cc3.jpg");
-		ImageIcon icon6 = new ImageIcon("images\\mnks\\cc3.jpg");
+		ImageIcon icon6 = ConfigManager.simuteIcon.getCc0Icon();
 		JPanel panel6 = new JPanel();
-		panel6.setBorder(BorderFactory
-				.createLineBorder(new Color(195, 201, 212)));
+//		panel6.setBorder(BorderFactory
+//				.createLineBorder(new Color(195, 201, 212)));
 		panel6.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 0));
 		panel6.setOpaque(false);
 		left.add(panel6);
@@ -347,10 +378,10 @@ public class ExamFrm extends ExamWindow {
 		panel6.add(lb_km_14);
 
 		// JPanelUtils.addItem(left, lb_km_3, "images\\mnks\\zxxs3.jpg");
-		ImageIcon icon7 = new ImageIcon("images\\mnks\\zxxs3.jpg");
+		ImageIcon icon7 = ConfigManager.simuteIcon.getZxxs0Icon();
 		JPanel panel7 = new JPanel();
-		panel7.setBorder(BorderFactory
-				.createLineBorder(new Color(195, 201, 212)));
+//		panel7.setBorder(BorderFactory
+//				.createLineBorder(new Color(195, 201, 212)));
 		panel7.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 0));
 		panel7.setOpaque(false);
 		left.add(panel7);
@@ -358,10 +389,10 @@ public class ExamFrm extends ExamWindow {
 		panel7.add(lb_km_3);
 
 		// JPanelUtils.addItem(left, lb_km_9, "images\\mnks\\lkyz3.jpg");
-		ImageIcon icon8 = new ImageIcon("images\\mnks\\lkyz3.jpg");
+		ImageIcon icon8 = ConfigManager.simuteIcon.getLkyz0Icon();
 		JPanel panel8 = new JPanel();
-		panel8.setBorder(BorderFactory
-				.createLineBorder(new Color(195, 201, 212)));
+//		panel8.setBorder(BorderFactory
+//				.createLineBorder(new Color(195, 201, 212)));
 		panel8.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 0));
 		panel8.setOpaque(false);
 		left.add(panel8);
@@ -369,10 +400,10 @@ public class ExamFrm extends ExamWindow {
 		panel8.add(lb_km_9);
 
 		// JPanelUtils.addItem(left, lb_km_15, "images\\mnks\\dt3.jpg");
-		ImageIcon icon9 = new ImageIcon("images\\mnks\\dt3.jpg");
+		ImageIcon icon9 = ConfigManager.simuteIcon.getDt0Icon();
 		JPanel panel9 = new JPanel();
-		panel9.setBorder(BorderFactory
-				.createLineBorder(new Color(195, 201, 212)));
+//		panel9.setBorder(BorderFactory
+//				.createLineBorder(new Color(195, 201, 212)));
 		panel9.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 0));
 		panel9.setOpaque(false);
 		left.add(panel9);
@@ -380,10 +411,10 @@ public class ExamFrm extends ExamWindow {
 		panel9.add(lb_km_15);
 
 		// JPanelUtils.addItem(left, lb_km_4, "images\\mnks\\jjdw3.jpg");
-		ImageIcon icon10 = new ImageIcon("images\\mnks\\jjdw3.jpg");
+		ImageIcon icon10 = ConfigManager.simuteIcon.getJjdw0Icon();
 		JPanel panel10 = new JPanel();
-		panel10.setBorder(BorderFactory.createLineBorder(new Color(195, 201,
-				212)));
+//		panel10.setBorder(BorderFactory.createLineBorder(new Color(195, 201,
+//				212)));
 		panel10.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 0));
 		panel10.setOpaque(false);
 		left.add(panel10);
@@ -391,10 +422,10 @@ public class ExamFrm extends ExamWindow {
 		panel10.add(lb_km_4);
 
 		// JPanelUtils.addItem(left, lb_km_10, "images\\mnks\\rxhd3.jpg");
-		ImageIcon icon11 = new ImageIcon("images\\mnks\\rxhd3.jpg");
+		ImageIcon icon11 = ConfigManager.simuteIcon.getRxhd0Icon();
 		JPanel panel11 = new JPanel();
-		panel11.setBorder(BorderFactory.createLineBorder(new Color(195, 201,
-				212)));
+//		panel11.setBorder(BorderFactory.createLineBorder(new Color(195, 201,
+//				212)));
 		panel11.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 0));
 		panel11.setOpaque(false);
 		left.add(panel11);
@@ -403,10 +434,10 @@ public class ExamFrm extends ExamWindow {
 		// JPanelUtils.addItem(left, lb_km_16, "images\\mnks\\yjxs3.jpg");
 
 		// JPanelUtils.addItem(left, lb_km_5, "images\\mnks\\bgcd3.jpg");
-		ImageIcon icon12 = new ImageIcon("images\\mnks\\bgcd3.jpg");
+		ImageIcon icon12 = ConfigManager.simuteIcon.getBgcd0Icon();
 		JPanel panel12 = new JPanel();
-		panel12.setBorder(BorderFactory.createLineBorder(new Color(195, 201,
-				212)));
+//		panel12.setBorder(BorderFactory.createLineBorder(new Color(195, 201,
+//				212)));
 		panel12.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 0));
 		panel12.setOpaque(false);
 		left.add(panel12);
@@ -414,10 +445,10 @@ public class ExamFrm extends ExamWindow {
 		panel12.add(lb_km_5);
 
 		// JPanelUtils.addItem(left, lb_km_11, "images\\mnks\\xxqy3.jpg");
-		ImageIcon icon13 = new ImageIcon("images\\mnks\\xxqy3.jpg");
+		ImageIcon icon13 = ConfigManager.simuteIcon.getXxqy0Icon();
 		JPanel panel13 = new JPanel();
-		panel13.setBorder(BorderFactory.createLineBorder(new Color(195, 201,
-				212)));
+//		panel13.setBorder(BorderFactory.createLineBorder(new Color(195, 201,
+//				212)));
 		panel13.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 0));
 		panel13.setOpaque(false);
 		left.add(panel13);
@@ -425,10 +456,10 @@ public class ExamFrm extends ExamWindow {
 		panel13.add(lb_km_11);
 
 		// JPanelUtils.addItem(left, lb_km_6, "images\\mnks\\kbtc3.jpg");
-		ImageIcon icon14 = new ImageIcon("images\\mnks\\kbtc3.jpg");
+		ImageIcon icon14 = ConfigManager.simuteIcon.getKbtc0Icon();
 		JPanel panel14 = new JPanel();
-		panel14.setBorder(BorderFactory.createLineBorder(new Color(195, 201,
-				212)));
+//		panel14.setBorder(BorderFactory.createLineBorder(new Color(195, 201,
+//				212)));
 		panel14.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 0));
 		panel14.setOpaque(false);
 		left.add(panel14);
@@ -436,83 +467,91 @@ public class ExamFrm extends ExamWindow {
 		panel14.add(lb_km_6);
 
 		// JPanelUtils.addItem(left, lb_km_12, "images\\mnks\\ggcz3.jpg");
-		ImageIcon icon15 = new ImageIcon("images\\mnks\\ggcz3.jpg");
+		ImageIcon icon15 = ConfigManager.simuteIcon.getGgcz0Icon();
 		JPanel panel15 = new JPanel();
-		panel15.setBorder(BorderFactory.createLineBorder(new Color(195, 201,
-				212)));
+//		panel15.setBorder(BorderFactory.createLineBorder(new Color(195, 201,
+//				212)));
 		panel15.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 0));
 		panel15.setOpaque(false);
 		left.add(panel15);
 		lb_km_12 = new JLabel(icon15);//
 		panel15.add(lb_km_12);
-
+		
+		
+		ImageIcon icon16 = ConfigManager.simuteIcon.getDgmn0Icon();
 		JPanel panel16 = new JPanel();
-		panel16.setBorder(BorderFactory.createLineBorder(new Color(195, 201,
-				212)));
-		FlowLayout flowLayout_14 = (FlowLayout) panel16.getLayout();
-		flowLayout_14.setAlignment(0);
-		flowLayout_14.setHgap(10);
+//		panel16.setBorder(BorderFactory.createLineBorder(new Color(195, 201,
+//				212)));
+		panel16.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 0));
 		panel16.setOpaque(false);
 		left.add(panel16);
+		lb_km_16 = new JLabel(icon16);//
+		panel16.add(lb_km_16);
 
-		this.lb_km_16 = new JLabel("夜间行驶");
-		this.lb_km_16.setHorizontalAlignment(2);
-		this.lb_km_16.setForeground(new Color(83, 95, 252));
-		this.lb_km_16.setFont(font);
-		panel16.add(this.lb_km_16);
-
-		JPanel panel17 = new JPanel();
-		panel17.setBorder(BorderFactory.createLineBorder(new Color(195, 201,
-				212)));
-		FlowLayout flowLayout_17 = (FlowLayout) panel17.getLayout();
-		flowLayout_17.setHgap(25);
-		panel17.setOpaque(false);
-		left.add(panel17);
-
-		JPanel panel_18 = new JPanel();
-		panel_18.setBorder(BorderFactory.createLineBorder(new Color(195, 201,
-				212)));
-		FlowLayout flowLayout_20 = (FlowLayout) panel_18.getLayout();
-		flowLayout_20.setHgap(25);
-		panel_18.setOpaque(false);
-		left.add(panel_18);
 
 		// 分割右下角界面
 		JPanel right = new JPanel();
+		right.setBackground(new Color(182, 196, 211));
 		// right.setOpaque(false);
-		right.setPreferredSize(new Dimension(350, bottomPanel.getHeight()));
+		right.setPreferredSize(new Dimension(320, bottomPanel.getHeight()));
 		// right.setBackground(Color.RED);
 		bottomPanel.add(right);
 
 		right.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		JPanel rightTop = new JPanel();
-		rightTop.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
+		rightTop.setBackground(new Color(182, 196, 211));
+		rightTop.setBorder(BorderFactory.createEmptyBorder(5, 25, 0, 0));
 		rightTop.setLayout(new GridLayout(1, 3, 0, 0));
-		rightTop.setPreferredSize(new Dimension(350, 110));
+		rightTop.setPreferredSize(new Dimension(320, 50));
 		right.add(rightTop);
-		ksks = new JButton(new ImageIcon("images\\mnks\\star.jpg"));
+		ksks = new JButton(new ImageIcon("images\\mnks\\star.png"));
 		ksks.setOpaque(false);
+		ksks.setRolloverIcon(new ImageIcon("images\\mnks\\star_touch.png"));
 		ksks.setBorderPainted(false);
 		// 设置 contentAreaFilled 属性。如果该属性为
 		// true，则按钮将绘制内容区域。如果希望有一个透明的按钮，比如只是一个图标的按钮，那么应该将此属性设置为 false。
 		ksks.setContentAreaFilled(false);
+		
+		
+		cxks = new JButton(new ImageIcon("images\\mnks\\restar.png"));
+		cxks.setOpaque(false);
+		cxks.setRolloverIcon(new ImageIcon("images\\mnks\\restar_touch.png"));
+		cxks.setBorderPainted(false);
+		cxks.setContentAreaFilled(false);
+		cxks.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				 EventQueue.invokeLater(new Runnable()
+			        {
+			          public void run() {
+			            new ExamFrm("模拟考试");
+			          }
+			        });
+				 ExamFrm.this.dispose();
+			}
+			
+		});
+		
+		
 
-		jsks = new JButton(new ImageIcon("images\\mnks\\exit.jpg"));
-		jsks.setOpaque(false);
-		jsks.setBorderPainted(false);
-		jsks.setContentAreaFilled(false);
+		
+		
+		JLabel empty = new JLabel("");
 
-		dycj = new JButton(new ImageIcon("images\\mnks\\print.jpg"));
-		dycj.setOpaque(false);
-		dycj.setBorderPainted(false);
-		dycj.setContentAreaFilled(false);
+//		ykkq = new JButton(new ImageIcon("images\\mnks\\print.jpg"));
+//		ykkq.setOpaque(false);
+//		ykkq.setBorderPainted(false);
+//		ykkq.setContentAreaFilled(false);
 
 		rightTop.add(ksks);
-		rightTop.add(jsks);
-		rightTop.add(dycj);
+		rightTop.add(cxks);
+		rightTop.add(empty);
+	//	rightTop.add(ykkq);
 
 		ksks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ExamFrm.this.ksks.setEnabled(false);
+				
 				for(int i = 0; i < 20; i++){
 					ConfigManager.ITEMSTATE[i] = 0;
 				}
@@ -524,34 +563,20 @@ public class ExamFrm extends ExamWindow {
 				ExamFrm.this.timerTickThread.start();
 				ExamFrm.this.startSimulate();
 			}
-
 		});
-		jsks.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (ExamFrm.this.golbalExamThread != null)
-					ExamFrm.this.golbalExamThread.runFlag = false;
-				ExamFrm.this.golbalExamThread = null;
-
-				if (ExamFrm.this.timerTickThread != null)
-					ExamFrm.this.timerTickThread.runFlag = false;
-				ExamFrm.this.timerTickThread = null;
-
-				ExamFrm.this.dispose();
-			}
-		});
 		JPanel rightBottom = new JPanel();
-		rightBottom.setBorder(BorderFactory.createEmptyBorder(0, 30, 20, 30));
-		rightBottom.setLayout(new GridLayout(1, 3, 0, 0));
-		rightBottom.setPreferredSize(new Dimension(350, 150));
+		rightBottom.setBackground(new Color(182, 196, 211));
+		rightBottom.setBorder(BorderFactory.createEmptyBorder(0, 25, 20, 30));
+		rightBottom.setPreferredSize(new Dimension(350, bottomPanel.getHeight() - 50));
 		right.add(rightBottom);
 
 		rightBottom.setLayout(new GridLayout(4, 2, 0, 0));
 
 		JPanel panel = new JPanel();
-		// panel.setOpaque(false);
+		panel.setOpaque(false);
 		rightBottom.add(panel);
+//		panel.setBackground(new Color(82, 196, 211));
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
 		JLabel label = new JLabel("得分：");
@@ -567,7 +592,7 @@ public class ExamFrm extends ExamWindow {
 		panel.add(this.lb_score);
 
 		JPanel panel_lon = new JPanel();
-		// panel.setOpaque(false);
+		panel_lon.setOpaque(false);
 		rightBottom.add(panel_lon);
 		panel_lon.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
@@ -577,14 +602,14 @@ public class ExamFrm extends ExamWindow {
 		lon.setFont(font);
 		panel_lon.add(lon);
 
-		this.lb_lon = new JLabel("1144.1203");
+		this.lb_lon = new JLabel("1144.12030");
 		this.lb_lon.setHorizontalAlignment(2);
 		this.lb_lon.setForeground(Color.BLACK);
 		this.lb_lon.setFont(font);
 		panel_lon.add(this.lb_lon);
 
 		JPanel panel_1 = new JPanel();
-		// panel_1.setOpaque(false);
+		panel_1.setOpaque(false);
 		rightBottom.add(panel_1);
 		panel_1.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
@@ -601,7 +626,7 @@ public class ExamFrm extends ExamWindow {
 		panel_1.add(this.lb_startime);
 
 		JPanel panel_lat = new JPanel();
-		// panel.setOpaque(false);
+		panel_lat.setOpaque(false);
 		rightBottom.add(panel_lat);
 		panel_lat.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
@@ -618,6 +643,7 @@ public class ExamFrm extends ExamWindow {
 		panel_lat.add(this.lb_lat);
 
 		JPanel panel_2 = new JPanel();
+		panel_2.setOpaque(false);
 		rightBottom.add(panel_2);
 		panel_2.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
@@ -634,6 +660,7 @@ public class ExamFrm extends ExamWindow {
 		panel_2.add(this.lb_timer);
 
 		JPanel panel_ori = new JPanel();
+		panel_ori.setOpaque(false);
 		rightBottom.add(panel_ori);
 		panel_ori.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
@@ -650,6 +677,7 @@ public class ExamFrm extends ExamWindow {
 		panel_ori.add(this.lb_ori);
 
 		JPanel panel_3 = new JPanel();
+		panel_3.setOpaque(false);
 		rightBottom.add(panel_3);
 		panel_3.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
@@ -666,6 +694,7 @@ public class ExamFrm extends ExamWindow {
 		panel_3.add(this.lb_speed);
 
 		JPanel panel_dang = new JPanel();
+		panel_dang.setOpaque(false);
 		rightBottom.add(panel_dang);
 		panel_dang.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
@@ -675,13 +704,59 @@ public class ExamFrm extends ExamWindow {
 		dang.setFont(font);
 		panel_dang.add(dang);
 
-		this.lb_dang = new JLabel("5档");
+		this.lb_dang = new JLabel("0档");
 		this.lb_dang.setHorizontalAlignment(2);
 		this.lb_dang.setForeground(Color.BLACK);
 		this.lb_dang.setFont(font);
 		panel_dang.add(this.lb_dang);
+		
+		JPanel bottom_right_bottm = new JPanel();
+		bottom_right_bottm.setOpaque(false);
+		bottom_right_bottm.setPreferredSize(new Dimension(98, bottomPanel.getHeight()));
+		bottom_right_bottm.setLayout(new GridLayout(3, 1, 0, 0));
+		
+		bottomPanel.add(bottom_right_bottm);
+		
+		mndg = new JButton(new ImageIcon("images\\mnks\\mndg_off.png"));
+		mndg.setOpaque(false);
+//		mndg.setRolloverIcon(new ImageIcon("images\\mnks\\mndg_off.png"));
+		mndg.setBorderPainted(false);
+		mndg.setContentAreaFilled(false);
+		
+		bottom_right_bottm.add(mndg);
+		
+		ykkq = new JButton(new ImageIcon("images\\mnks\\yekao_off.png"));
+		ykkq.setOpaque(false);
+//		ykkq.setRolloverIcon(new ImageIcon("images\\mnks\\yekao_off.png"));
+		ykkq.setBorderPainted(false);
+		ykkq.setContentAreaFilled(false);
+		
+		bottom_right_bottm.add(ykkq);
+		
+		jsks = new JButton(new ImageIcon("images\\mnks\\end.png"));
+		jsks.setOpaque(false);
+		jsks.setRolloverIcon(new ImageIcon("images\\mnks\\end_touch.png"));
+		jsks.setBorderPainted(false);
+		jsks.setContentAreaFilled(false);
+		
+		jsks.addActionListener(new ActionListener() {
 
-		// ConfigManager.ITEMSTATE = new int[20];
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (ExamFrm.this.golbalExamThread != null)
+					ExamFrm.this.golbalExamThread.runFlag = false;
+				ExamFrm.this.golbalExamThread = null;
+				
+				if (ExamFrm.this.nightLightThread != null)
+					ExamFrm.this.nightLightThread.runFlag = false;
+				ExamFrm.this.nightLightThread = null;
+				ExamFrm.this.dispose();
+			}
+		});
+		bottom_right_bottm.add(jsks);
+		for(int i = 0; i < 20; i ++){
+			ConfigManager.ITEMSTATE[i] = 0;
+		}
 
 		// this.prepareThread = new PrepareThread(this, PrepareThread.EXAMFLAG);
 		// addModule(this.prepareThread);
@@ -699,23 +774,31 @@ public class ExamFrm extends ExamWindow {
 	private void startSimulate() {
 		GpsMonitor gpsMonitor = new GpsMonitor();
 		gpsMonitor.start();
-
-		// int examId = getRandomNight();
-		// NightLightThread nightLightThread = new NightLightThread(this,
-		// NightLightThread.EXAMFLAG);
-		// if (ConfigManager.CARPARM_NIGHT_AUTO)
-		// nightLightThread.setExamId(examId);
-		// else
-		// nightLightThread.setExamId(0);
-		// addModule(nightLightThread);
-		// setFlagById(13, 1);
-		// nightLightThread.start();
-
-		this.golbalExamThread = new GolbalExamThread(this,
-				GolbalExamThread.EXAMFLAG);
-		addModule(this.golbalExamThread);
-		this.golbalExamThread.start();
-		this.iState = 2;
+		
+//		ExamFrm.this.prepareThread = new PrepareThread(ExamFrm.this, prepareThread.EXAMFLAG);
+//	    addModule(ExamFrm.this.prepareThread);
+//	    setFlagById(1, 1);
+//	    ExamFrm.this.prepareThread.start();
+//
+//	    while(ExamFrm.this.prepareThread.isAlive());
+//	    
+//		 int examId = getRandomNight();
+//		 NightLightThread nightLightThread = new NightLightThread(ExamFrm.this,
+//		 NightLightThread.EXAMFLAG);
+//		 if (ConfigManager.CARPARM_NIGHT_AUTO)
+//		 nightLightThread.setExamId(examId);
+//		 else
+//		 nightLightThread.setExamId(0);
+//		 
+//		 addModule(nightLightThread);
+//		 setFlagById(13, 1);
+//		 nightLightThread.start();
+//
+//		ExamFrm.this.golbalExamThread = new GolbalExamThread(ExamFrm.this,
+//				GolbalExamThread.EXAMFLAG);
+//		addModule(ExamFrm.this.golbalExamThread);
+//		ExamFrm.this.golbalExamThread.start();
+	//	this.iState = 2;
 	}
 
 	public void dispose() {
@@ -723,6 +806,11 @@ public class ExamFrm extends ExamWindow {
 			this.timeThread.runFlag = false;
 		this.timeThread = null;
 
+
+		if (ExamFrm.this.timerTickThread != null)
+			ExamFrm.this.timerTickThread.runFlag = false;
+		ExamFrm.this.timerTickThread = null;
+		
 		if (this.uiThread != null)
 			this.uiThread.runFlag = false;
 		this.uiThread = null;
@@ -730,6 +818,14 @@ public class ExamFrm extends ExamWindow {
 		if (this.golbalExamThread != null)
 			this.golbalExamThread.runFlag = false;
 		this.golbalExamThread = null;
+		
+		if (this.nightLightThread != null)
+			this.nightLightThread.runFlag = false;
+		this.nightLightThread = null;
+		
+		 if (this.uiThread != null)
+		      this.uiThread.runFlag = false;
+		    this.uiThread = null;
 		super.dispose();
 	}
 
@@ -838,15 +934,32 @@ public class ExamFrm extends ExamWindow {
 				addModule(startThread);
 				startThread.start();
 				setFlagById(2, 1);
-				this.iState = 3;
+				
+				ExamFrm.this.golbalExamThread = new GolbalExamThread(ExamFrm.this,
+						GolbalExamThread.EXAMFLAG);
+				addModule(ExamFrm.this.golbalExamThread);
+				ExamFrm.this.golbalExamThread.start();
+		//		this.iState = 3;
 				break;
 			case 1:
 				successFlag(1);
+				 int examId = getRandomNight();
+				 ExamFrm.this.nightLightThread = new NightLightThread(ExamFrm.this,
+				 NightLightThread.EXAMFLAG);
+				 if (ConfigManager.CARPARM_NIGHT_AUTO)
+					 ExamFrm.this.nightLightThread.setExamId(examId);
+				 else
+					 ExamFrm.this.nightLightThread.setExamId(0);
+				 
+				 addModule(ExamFrm.this.nightLightThread);
+				 ExamFrm.this.nightLightThread.start();
+				 setFlagById(13, 1);
+				
 
 				break;
 			case 2:
 				successFlag(2);
-				this.iState = 0;
+		//		this.iState = 0;
 				break;
 			case 4:
 				successFlag(4);
@@ -858,9 +971,6 @@ public class ExamFrm extends ExamWindow {
 				successFlag(5);
 				break;
 			case 6:
-				successFlag(6);
-				break;
-			case 17:
 				successFlag(6);
 				break;
 			case 7:
@@ -963,8 +1073,6 @@ public class ExamFrm extends ExamWindow {
 		setFlagById(type, 2);
 
 		this.iScore += score;
-		if (this.iScore < 0)
-			this.iScore = 0;
 	}
 
 	public void startItem(int typeID) {
@@ -1072,6 +1180,9 @@ public class ExamFrm extends ExamWindow {
 			setFlagById(12, 1);
 			break;
 		case 13:
+			break;
+			
+			
 		}
 
 	}
@@ -1083,6 +1194,24 @@ public class ExamFrm extends ExamWindow {
 		}
 
 		public void run() {
+			
+			ExamFrm.this.prepareThread = new PrepareThread(ExamFrm.this, prepareThread.EXAMFLAG);
+		    addModule(ExamFrm.this.prepareThread);
+		    setFlagById(1, 1);
+		    ExamFrm.this.prepareThread.start();
+
+	//	    while(ExamFrm.this.prepareThread.isAlive());
+		    
+			
+			 
+//			 if(ExamFrm.this.isRunning){
+//			 while(ExamFrm.this.nightLightThread.isAlive())
+//				 ;
+//			 }
+			
+
+		
+			
 			while (this.runFlag)
 				try {
 					moniterPoint(ExamFrm.this.judge);
@@ -1321,11 +1450,155 @@ public class ExamFrm extends ExamWindow {
 		private void refreshTitle(JudgeSignal carSignal) {
 			try {
 				ExamFrm.this.lb_speed.setText(carSignal.gpsspeed + "Km/h");
-				ExamFrm.this.lb_lat.setText(new DecimalFormat("#.0000").format(carSignal.lat));
-				ExamFrm.this.lb_lon.setText(new DecimalFormat("#.0000").format(carSignal.lon));
+				ExamFrm.this.lb_lat.setText(new DecimalFormat("#.00000").format(carSignal.lat));
+				ExamFrm.this.lb_lon.setText(new DecimalFormat("#.00000").format(carSignal.lon));
 				ExamFrm.this.lb_score.setText(ExamFrm.this.iScore + "");
 				ExamFrm.this.lb_ori.setText(carSignal.gpsangle + "度");
 				ExamFrm.this.lb_dang.setText(carSignal.gear + "档");
+				
+				if(carSignal.gps){
+					gps.setIcon(signalIcon.getGpskIcon());		
+				}else
+				{
+					gps.setIcon(signalIcon.getGpsgIcon());					
+				}
+				
+				if(carSignal.gear == -1){
+					dw.setIcon(signalIcon.getDdIcon());					
+				}else if(carSignal.gear == 0){
+					dw.setIcon(signalIcon.getDkIcon());	
+				}else if(carSignal.gear == 1){
+					dw.setIcon(signalIcon.getD1Icon());	
+				}else if(carSignal.gear == 2){
+					dw.setIcon(signalIcon.getD2Icon());	
+				}else if(carSignal.gear == 3){
+					dw.setIcon(signalIcon.getD3Icon());	
+				}else if(carSignal.gear == 4){
+					dw.setIcon(signalIcon.getD4Icon());	
+				}else {
+					dw.setIcon(signalIcon.getD5Icon());	
+				}
+				
+				if(carSignal.tcp){
+					wl.setIcon(signalIcon.getWlkIcon());
+
+				}else
+				{
+					wl.setIcon(signalIcon.getWlgIcon());
+				}
+				
+				if(carSignal.signal_off){
+					xh.setIcon(signalIcon.getXhkIcon());
+				}else
+				{
+					xh.setIcon(signalIcon.getXhgIcon());
+				}
+				
+				if(carSignal.signal_seatbelt){
+					aqdbd.setIcon(signalIcon.getAqdbdIcon());
+				}else
+				{
+					aqdbd.setIcon(signalIcon.getAqdcrIcon());
+				}
+				if(carSignal.signal_deputybrake){	
+					fss.setIcon(signalIcon.getFscIcon());
+				}else
+				{
+					fss.setIcon(signalIcon.getFssIcon());
+				}
+				
+				if(carSignal.signal_rearbumper){
+					hldg.setIcon(signalIcon.getHldkIcon());
+				}else
+				{
+					hldg.setIcon(signalIcon.getHldgIcon());
+				}
+				
+				if(carSignal.signal_footbrake){
+					jss.setIcon(signalIcon.getJscIcon());
+				}else
+				{
+					jss.setIcon(signalIcon.getJssIcon());
+				}
+				
+				if(carSignal.lamp_near){
+					jgdg.setIcon(signalIcon.getJgdkIcon());
+				}else
+				{
+					jgdg.setIcon(signalIcon.getJgdgIcon());
+				}
+				
+				if(carSignal.signal_horn){
+					lbs.setIcon(signalIcon.getLbaIcon());
+				}else
+				{
+					lbs.setIcon(signalIcon.getLbsIcon());
+				}
+				
+				if(carSignal.signal_frontbumper){
+					qldg.setIcon(signalIcon.getQldkIcon());
+				}else
+				{
+					qldg.setIcon(signalIcon.getQldgIcon());
+				}
+				
+				if(carSignal.signal_handbrake){
+					sss.setIcon(signalIcon.getSskIcon());
+				}else
+				{
+					sss.setIcon(signalIcon.getSssIcon());
+				}
+				
+				if(carSignal.lamp_fog){
+					wdg.setIcon(signalIcon.getWdkIcon());
+				}else
+				{
+					wdg.setIcon(signalIcon.getWdgIcon());
+				}
+				
+				if(carSignal.lamp_urgent){
+					yjdg.setIcon(signalIcon.getYjdkIcon());					
+				}else
+				{
+					yjdg.setIcon(signalIcon.getYjdgIcon());	
+				}
+				
+				if(carSignal.lamp_right){
+					yzxg.setIcon(signalIcon.getYzxkIcon());
+				}else
+				{
+					yzxg.setIcon(signalIcon.getYzxgIcon());
+				}
+				
+				if(carSignal.lamp_highbeam){
+					ygdg.setIcon(signalIcon.getYgdkIcon());
+				}else
+				{
+					ygdg.setIcon(signalIcon.getYgdgIcon());
+				}
+				
+				if(carSignal.lamp_left){
+					zzxg.setIcon(signalIcon.getZzxkIcon());
+				}else
+				{
+					zzxg.setIcon(signalIcon.getZzxgIcon());
+				}
+				
+				//更新夜考开启按钮 和 模拟灯光按钮
+				if( (!ConfigManager.CARPARM_NIGHT_AUTO)&&(ConfigManager.CARPARM_NIGHT_YKMS) ){
+					
+					 ExamFrm.this.mndg.setIcon(new ImageIcon("images\\mnks\\mndg_off.png"));
+					 ExamFrm.this.ykkq.setIcon(new ImageIcon("images\\mnks\\yekao_on.png"));
+				}
+				else if (ConfigManager.CARPARM_NIGHT_AUTO){
+					 ExamFrm.this.mndg.setIcon(new ImageIcon("images\\mnks\\mndg_on.png"));
+					 ExamFrm.this.ykkq.setIcon(new ImageIcon("images\\mnks\\yekao_off.png"));
+				}
+				 else
+				 {
+					 ExamFrm.this.mndg.setIcon(new ImageIcon("images\\mnks\\mndg_off.png"));
+					 ExamFrm.this.ykkq.setIcon(new ImageIcon("images\\mnks\\yekao_off.png"));
+				 }
 
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -1336,10 +1609,11 @@ public class ExamFrm extends ExamWindow {
 			try {
 				for (int i = 0; i < ConfigManager.ITEMSTATE.length; i++) {
 					int state = ConfigManager.ITEMSTATE[i];
-					// System.out.println("state--------------------->" + state );
+			//		System.out.println("state--------------------->" + ConfigManager.ITEMSTATE[16] );
 					switch (i + 1) {
 					case 1:
 						// System.out.println(ConfigManager.simuteIcon.getSczb1Icon());
+						//上车准备
 						switch (state) {
 						case 0:
 							ExamFrm.this.lb_km_1
@@ -1360,6 +1634,7 @@ public class ExamFrm extends ExamWindow {
 						}
 						break;
 					case 2:
+						//起步
 						switch (state) {
 						case 0:
 							ExamFrm.this.lb_km_2
@@ -1380,6 +1655,7 @@ public class ExamFrm extends ExamWindow {
 						}
 						break;
 					case 3:
+						//直线行驶
 						switch (state) {
 						case 0:
 							ExamFrm.this.lb_km_3
@@ -1400,26 +1676,7 @@ public class ExamFrm extends ExamWindow {
 						}
 						break;
 					case 14:
-						switch (state) {
-						case 0:
-							ExamFrm.this.lb_km_4
-									.setIcon(ConfigManager.simuteIcon
-											.getCc0Icon());break;
-						case 1:
-							ExamFrm.this.lb_km_4
-									.setIcon(ConfigManager.simuteIcon
-											.getCc1Icon());break;
-						case 2:
-							ExamFrm.this.lb_km_4
-									.setIcon(ConfigManager.simuteIcon
-											.getCc2Icon());break;
-						case 3:
-							ExamFrm.this.lb_km_4
-									.setIcon(ConfigManager.simuteIcon
-											.getCc3Icon());break;
-						}
-						break;
-					case 4:
+						//
 						switch (state) {
 						case 0:
 							ExamFrm.this.lb_km_4
@@ -1439,27 +1696,7 @@ public class ExamFrm extends ExamWindow {
 											.getJjdw3Icon());break;
 						}
 						break;
-					case 11:
-						switch (state) {
-						case 0:
-							ExamFrm.this.lb_km_11
-									.setIcon(ConfigManager.simuteIcon
-											.getXxqy0Icon());break;
-						case 1:
-							ExamFrm.this.lb_km_11
-									.setIcon(ConfigManager.simuteIcon
-											.getXxqy1Icon());break;
-						case 2:
-							ExamFrm.this.lb_km_11
-									.setIcon(ConfigManager.simuteIcon
-											.getXxqy2Icon());break;
-						case 3:
-							ExamFrm.this.lb_km_11
-									.setIcon(ConfigManager.simuteIcon
-											.getXxqy3Icon());break;
-						}
-						break;
-					case 5:
+					case 4:
 						switch (state) {
 						case 0:
 							ExamFrm.this.lb_km_5
@@ -1479,39 +1716,7 @@ public class ExamFrm extends ExamWindow {
 											.getBgcd3Icon());break;
 						}
 						break;
-					case 15:
-						switch (state) {
-						case 0:
-							ExamFrm.this.lb_km_15
-									.setIcon(ConfigManager.simuteIcon
-											.getDt0Icon());break;
-						case 1:
-							ExamFrm.this.lb_km_15
-									.setIcon(ConfigManager.simuteIcon
-											.getDt1Icon());break;
-						case 2:
-							ExamFrm.this.lb_km_15
-									.setIcon(ConfigManager.simuteIcon
-											.getDt2Icon());break;
-						case 3:
-							ExamFrm.this.lb_km_15
-									.setIcon(ConfigManager.simuteIcon
-											.getDt3Icon());break;
-						}
-						break;
-					case 16:
-						// switch(state){
-						// case
-						// 0:ExamFrm.this.lb_km_16.setIcon(ConfigManager.simuteIcon.getQb0Icon());
-						// case
-						// 1:ExamFrm.this.lb_km_16.setIcon(ConfigManager.simuteIcon.getQb1Icon());
-						// case
-						// 2:ExamFrm.this.lb_km_16.setIcon(ConfigManager.simuteIcon.getQb2Icon());
-						// case
-						// 3:ExamFrm.this.lb_km_16.setIcon(ConfigManager.simuteIcon.getQb3Icon());
-						// }
-						break;
-					case 6:
+					case 11:
 						switch (state) {
 						case 0:
 							ExamFrm.this.lb_km_6
@@ -1531,7 +1736,7 @@ public class ExamFrm extends ExamWindow {
 											.getKbtc3Icon());break;
 						}
 						break;
-					case 7:
+					case 5:
 						switch (state) {
 						case 0:
 							ExamFrm.this.lb_km_7
@@ -1551,7 +1756,7 @@ public class ExamFrm extends ExamWindow {
 											.getLkzx3Icon());break;
 						}
 						break;
-					case 8:
+					case 15:
 						switch (state) {
 						case 0:
 							ExamFrm.this.lb_km_8
@@ -1571,7 +1776,7 @@ public class ExamFrm extends ExamWindow {
 											.getLkzz3Icon());break;
 						}
 						break;
-					case 9:
+					case 16:
 						switch (state) {
 						case 0:
 							ExamFrm.this.lb_km_9
@@ -1591,7 +1796,7 @@ public class ExamFrm extends ExamWindow {
 											.getLkyz3Icon());break;
 						}
 						break;
-					case 10:
+					case 6:
 						switch (state) {
 						case 0:
 							ExamFrm.this.lb_km_10
@@ -1611,7 +1816,27 @@ public class ExamFrm extends ExamWindow {
 											.getRxhd3Icon());break;
 						}
 						break;
-					case 12:
+					case 7:
+						switch (state) {
+						case 0:
+							ExamFrm.this.lb_km_11
+									.setIcon(ConfigManager.simuteIcon
+											.getXxqy0Icon());break;
+						case 1:
+							ExamFrm.this.lb_km_11
+									.setIcon(ConfigManager.simuteIcon
+											.getXxqy1Icon());break;
+						case 2:
+							ExamFrm.this.lb_km_11
+									.setIcon(ConfigManager.simuteIcon
+											.getXxqy2Icon());break;
+						case 3:
+							ExamFrm.this.lb_km_11
+									.setIcon(ConfigManager.simuteIcon
+											.getXxqy3Icon());break;
+						}
+						break;
+					case 8:
 						switch (state) {
 						case 0:
 							ExamFrm.this.lb_km_12
@@ -1631,7 +1856,7 @@ public class ExamFrm extends ExamWindow {
 											.getGgcz3Icon());break;
 						}
 						break;
-					case 13:
+					case 9:
 						switch (state) {
 						case 0:
 							ExamFrm.this.lb_km_13
@@ -1649,6 +1874,70 @@ public class ExamFrm extends ExamWindow {
 							ExamFrm.this.lb_km_13
 									.setIcon(ConfigManager.simuteIcon
 											.getHc3Icon());break;
+						}
+						break;
+					case 10:
+						switch (state) {
+						case 0:
+							ExamFrm.this.lb_km_14
+									.setIcon(ConfigManager.simuteIcon
+											.getCc0Icon());break;
+						case 1:
+							ExamFrm.this.lb_km_14
+									.setIcon(ConfigManager.simuteIcon
+											.getCc1Icon());break;
+						case 2:
+							ExamFrm.this.lb_km_14
+									.setIcon(ConfigManager.simuteIcon
+											.getCc2Icon());break;
+						case 3:
+							ExamFrm.this.lb_km_14
+									.setIcon(ConfigManager.simuteIcon
+											.getCc3Icon());break;
+						}
+						break;
+					case 12:
+						switch (state) {
+						case 0:
+							ExamFrm.this.lb_km_15
+									.setIcon(ConfigManager.simuteIcon
+											.getDt0Icon());break;
+						case 1:
+							ExamFrm.this.lb_km_15
+									.setIcon(ConfigManager.simuteIcon
+											.getDt1Icon());break;
+						case 2:
+							ExamFrm.this.lb_km_15
+									.setIcon(ConfigManager.simuteIcon
+											.getDt2Icon());break;
+						case 3:
+							ExamFrm.this.lb_km_15
+									.setIcon(ConfigManager.simuteIcon
+											.getDt3Icon());break;
+						}
+						break;
+					case 13:
+						switch (state) {
+						case 0:
+							ExamFrm.this.lb_km_16
+									.setIcon(ConfigManager.simuteIcon
+											.getDgmn0Icon());
+							break;
+						case 1:
+							ExamFrm.this.lb_km_16
+									.setIcon(ConfigManager.simuteIcon
+											.getDgmn1Icon());
+							break;
+						case 2:
+							ExamFrm.this.lb_km_16
+									.setIcon(ConfigManager.simuteIcon
+											.getDgmn2Icon());
+							break;
+						case 3:
+							ExamFrm.this.lb_km_16
+									.setIcon(ConfigManager.simuteIcon
+											.getDgmn3Icon());
+							break;
 						}
 						break;
 					}

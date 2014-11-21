@@ -33,10 +33,8 @@ public class DBHelper {
 			this.conn = DriverManager.getConnection(DBUrl);
 			this.stmt = this.conn.createStatement();
 		//	System.out.println("连接数据库成功");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("数据库连接失败！");
 		}
 	}
 	public void close() {
@@ -44,6 +42,7 @@ public class DBHelper {
 			this.stmt.close();
 			this.conn.close();
 		} catch (Exception localException) {
+			System.out.println("数据库关闭失败!");
 		}
 	}
 	public ResultSet Query(String tableName, String condition, String cols) {
@@ -84,7 +83,7 @@ public class DBHelper {
 			int endIndex=line.lastIndexOf("\"");
 			sourceSource=line.substring(beginIndex+1, endIndex);
 			DBUrl="jdbc:odbc:"+sourceSource.trim();
-			System.out.println("DBUrl------------>:"+DBUrl);
+	//		System.out.println("DBUrl------------>:"+DBUrl);
 			br.close();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -164,19 +163,27 @@ public class DBHelper {
 		//		System.out.println(sql);
 				conn();
 				this.rs = this.stmt.executeQuery(sql);
-				
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			try {
 				while(rs.next())
 				{
 					res=rs.getString(1);
 				}
+				
 			} catch (SQLException e) {
+				System.out.println("数据库sql异常");
 				e.printStackTrace();
+			}finally
+			{
+				try {
+					if(rs != null){
+				//		rs.close();
+					}
+					close();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
-			close();
 		}
 		return res;
 	}
@@ -193,6 +200,7 @@ public class DBHelper {
 			String sql = "update carparmset set pvalue= '"+pValue+"' where  parmname= '" +  parmname+"'";
 			PreparedStatement ps = this.conn.prepareStatement(sql);
 			ps.executeUpdate();
+			ps.close();
 			close();
 		} catch (SQLException e) {
 			e.printStackTrace();

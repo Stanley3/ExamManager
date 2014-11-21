@@ -11,7 +11,7 @@ public class SchoolAreaThread extends ModuleThread {
 	private double curspeed = 0.0D;
 	public static double RANGETIGGER = ConfigManager.schoolArea
 			.getTriggerDistance();
-
+	private boolean drive_41101=false;
 	public SchoolAreaThread(ExamWindow window, int moduleFlag) {
 		super(window, moduleFlag);
 		this.jsfs = ConfigManager.schoolArea.getTimeOrDistance();
@@ -51,15 +51,20 @@ public class SchoolAreaThread extends ModuleThread {
 		this.curRange += Tools.getDistinceByOBDV(
 				JudgeSignal.getInstance().gpsspeed, 200);
 		this.curspeed = JudgeSignal.getInstance().gpsspeed;
+		if (this.curspeed > ConfigManager.schoolArea.getMaxSpeed()&&!this.drive_41101) {
+			this.drive_41101=true;
+			sendMessage("41101", 7);
+		} 
 		this.breakFlag |= JudgeSignal.getInstance().signal_footbrake;
 	}
 
 	public void judge() {
 		if (!ConfigManager.schoolArea.isOpen())
 			return;
-		if (this.curspeed > ConfigManager.schoolArea.getMaxSpeed()) {
-			sendMessage("41101", 7);
-		} else if ((ConfigManager.autoJadge.isNeedBrake()) && (!this.breakFlag))
+//		if (this.curspeed > ConfigManager.schoolArea.getMaxSpeed()) {
+//			sendMessage("41101", 7);
+//		} 
+		if ((ConfigManager.autoJadge.isNeedBrake()) && (!this.breakFlag))
 			sendMessage("41101", 7);
 	}
 }

@@ -192,6 +192,8 @@ public class ParSettingFrm extends JFrame{
 		j_StartCar.addActionListener(new StartCarListenerDialog());
 		j_PullOver.addActionListener(new PullOverListenerDialog());
 		j_Common.addActionListener(new CommonListenerDialog());
+		j_HandWheel.addActionListener(new HandWheelListenerDialog());
+		
 		this.setVisible(true);
 	}
 }

@@ -16,19 +16,19 @@ public class ChangeLaneThread extends ModuleThread {
 	private int iState = 1;
 	/* 起步、转向�?变更车道、超车�?停车前不使用或错误使用转向灯 */
 	private boolean changelane_30205 = false;
-	/* 起步、转向�?变更车道、超车�?停车前，�?��向灯少于3s即转�?*/
+	/* 起步、转向�?变更车道、超车�?停车前，�?��向灯少于3s即转�?*/
 	private boolean changelane_30206 = false;
-	/* 不按考试员指令驾�?*/
+	/* 不按考试员指令驾�?*/
 	private boolean changelane_30103 = true;
-	/* �?��时间 */
+	/* �?��时间 */
 	private long turnLightTime = 0;
-	/* �?��关灯时间 */
+	/* �?��关灯时间 */
 	private long lightOffStartTime = 0L;
 	/* 触发距离 */
 	public static double RANGETIGGER = ConfigManager.changeLane
 			.getTriggerDistance();
-	/* 偏转方向�?*/
-	private int turnAngle = ConfigManager.changeLane.getOffsetAngle();// CARPARM_CHANGELANE_BGCDZJD变更车道转角�?
+	/* 偏转方向�?*/
+	private int turnAngle = ConfigManager.changeLane.getOffsetAngle();// CARPARM_CHANGELANE_BGCDZJD变更车道转角�?
 	/* 时间 */
 	public double angle;
 	private long czsj = 0;
@@ -37,16 +37,15 @@ public class ChangeLaneThread extends ModuleThread {
 	double angleEnd = 0;
 	/**
 	 * 构�?函数
-	 * 
 	 * @param window
 	 * @param moduleFlag
 	 */
 	public ChangeLaneThread(ExamWindow window, int moduleFlag) {
 		super(window, moduleFlag);
-		this.jsfs = ConfigManager.changeLane.getTimeOrDistance();// StaticVariable.CARPARM_BUS_JSFS;
-		this.dRangeOut = ConfigManager.changeLane.getEndDistance();// StaticVariable.CARPARM_BUS_JSJL;
-		this.iTimeOut = ConfigManager.changeLane.getEndTime();// StaticVariable.CARPARM_BUS_JSSJ;
-		RANGETIGGER = ConfigManager.changeLane.getTriggerDistance();// StaticVariable.CARPARM_BUS_CFJL;
+		this.jsfs = ConfigManager.changeLane.getTimeOrDistance();
+		this.dRangeOut = ConfigManager.changeLane.getEndDistance();
+		this.iTimeOut = ConfigManager.changeLane.getEndTime();
+		RANGETIGGER = ConfigManager.changeLane.getTriggerDistance();
 	}
 
 	public synchronized void run() {
@@ -70,7 +69,7 @@ public class ChangeLaneThread extends ModuleThread {
 		}
 		/* 从窗口List中移除该线程 */
 		this.window.remove(this);
-		/* 是否有刹车信�?*/
+		/* 是否有刹车信�?*/
 		if (!this.isBreakFlag) {
 			judge();
 			sendEndMessage(4);
@@ -85,9 +84,9 @@ public class ChangeLaneThread extends ModuleThread {
 		/* 当前距离 */
 		this.curRange += Tools
 				.getDistinceByOBDV(JudgeSignal.getInstance().gpsspeed, 200);
-		/* 初始化汽车信�?*/
+		/* 初始化汽车信�?*/
 		// CarSignal carSignal = CarSignal.getInstance();
-		/* 这个角度是如何得到的  */
+		/* 角度得到 */
 		if (angleStart == 0.0)
 			angleStart = carsignal.gpsangle;
 		angleEnd = carsignal.gpsangle;
@@ -102,11 +101,11 @@ public class ChangeLaneThread extends ModuleThread {
 			if ((angle > this.turnAngle) || (angle < -this.turnAngle)) {
 				if ((ConfigManager.changeLane.isOpen())
 						&& (!this.changelane_30205)) {
-					/* 是否使用转向�?*/
+					/* 是否使用转向�?*/
 					this.changelane_30205 = true;
 					sendMessage("30205", 4);
 				}
-				// 没有使用转向灯状态转�?
+				// 没有使用转向灯状态转�?
 				this.iState = 4;
 			}
 			// 如果打了左转向灯
@@ -117,35 +116,37 @@ public class ChangeLaneThread extends ModuleThread {
 			} else {
 				if (!lamb_Right_State)
 					break;
-				this.iState = 3;// 使用右转�?
+				this.iState = 3;// 使用右转�?
 				System.currentTimeMillis();
 			}
 			break;
 		case 2:
-			// 判断是否已转�?
+			// 判断是否进行转向
 			if ((angle > this.turnAngle) || (angle < -this.turnAngle)) {
 				if ((ConfigManager.changeLane.isOpen())
 						&& (!this.changelane_30206)) {
-					
 					this.changelane_30206 = true;
 					sendMessage("30206", 4);
 				}
 				this.iState = 4;
 			}
-			// 如果转向灯时间大于等�?S
+			// 如果转向灯时间大于等�?S
 			if (this.turnLightTime >= ConfigManager.commonConfig
 					.getTurnLightWaitTime()) {
-				this.iState = 4;//(bug  只打灯不转向 不扣�?
+				/*修改 */
+				this.changelane_30206 = true;
+				
+				this.iState = 4;
 			} else if (lamb_Left_State) {
-		//		System.out.println("加灯�?��间：" + this.turnLightTime);
+		//		System.out.println("加灯�?��间：" + this.turnLightTime);
 				this.turnLightTime += 200;
 				this.lightOffStartTime = 0L;
 			} else {
 				this.lightOffStartTime += 200L;
-				// 如果灯关闭时间大于系统预设时�?1000ms)则将�?��时间重置�?
+				// 如果灯关闭时间大于系统预设时�?1000ms)则将�?��时间重置�?
 				if (this.lightOffStartTime > 1000)
 				{
-			//		System.out.println("将开灯时间清�?);
+			//		System.out.println("将开灯时间清�?);
 					this.turnLightTime = 0;
 				}
 				else {
@@ -164,25 +165,25 @@ public class ChangeLaneThread extends ModuleThread {
 			}
 			if (this.turnLightTime >= ConfigManager.commonConfig
 					.getTurnLightWaitTime()) {
+				this.changelane_30206 = true;
 				this.iState = 4;
 			} else if (lamb_Right_State) {
 				this.turnLightTime += 200;
 				this.lightOffStartTime = 0L;
 			} else {
 				this.lightOffStartTime += 200L;
-				// 如果灯关闭时间大于系统预设时�?1000ms)则将�?��时间重置�?
+				// 如果灯关闭时间大于系统预设时�?1000ms)则将�?��时间重置�?
 				if (this.lightOffStartTime > 1000)
 					this.turnLightTime = 0;
 				else {
 					this.turnLightTime += 200;
 				}
 			}
-
 			break;
 		case 4:
-			this.czsj += 200;// 刹车时间增加0.2S
-			if (this.czsj < 5000)
-				break;
+//			this.czsj += 200;// 刹车时间增加0.2S
+//			if (this.czsj < 5000)
+//				break;
 			while(!isOut())
 			{
 				angleEnd = carsignal.gpsangle;
@@ -197,7 +198,6 @@ public class ChangeLaneThread extends ModuleThread {
 			break;
 		}
 	}
-
 	public void judge() {
 		if (ConfigManager.changeLane.isOpen())
 			return;

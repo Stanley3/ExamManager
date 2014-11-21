@@ -1,7 +1,13 @@
 package com.scu.Model;
 
+import java.awt.Component;
+import java.awt.Font;
 import java.util.Vector;
 
+import javax.swing.DefaultCellEditor;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 /**
  * 错误信息表格模型
@@ -48,3 +54,5 @@ public class MyErrorTableModel extends AbstractTableModel{
 	  }
 	
 }
+
+

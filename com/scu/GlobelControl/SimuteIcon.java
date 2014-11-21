@@ -7,85 +7,90 @@ import javax.swing.ImageIcon;
  *
  */
 public class SimuteIcon {
-	private String sczb0 = "images\\mnks\\sczb3.jpg";
-	private String sczb1 = "images\\mnks\\sczb4.jpg";
-	private String sczb2 = "images\\mnks\\sczb2.jpg";
-	private String sczb3 = "images\\mnks\\sczb1.jpg";
+	private String sczb0 = "images\\mnks\\sczb1.png";
+	private String sczb1 = "images\\mnks\\sczb4.png";
+	private String sczb2 = "images\\mnks\\sczb3.png";
+	private String sczb3 = "images\\mnks\\sczb2.png";
 	
-	private String qb0 = "images\\mnks\\qb3.jpg";
-	private String qb1 = "images\\mnks\\qb4.jpg";
-	private String qb2 = "images\\mnks\\qb2.jpg";
-	private String qb3 = "images\\mnks\\qb1.jpg";
+	private String qb0 = "images\\mnks\\qb1.png";
+	private String qb1 = "images\\mnks\\qb4.png";
+	private String qb2 = "images\\mnks\\qb3.png";
+	private String qb3 = "images\\mnks\\qb2.png";
 	
-	private String zxxs0 = "images\\mnks\\zxxs3.jpg";
-	private String zxxs1 = "images\\mnks\\zxxs4.jpg";
-	private String zxxs2 = "images\\mnks\\zxxs2.jpg";
-	private String zxxs3 = "images\\mnks\\zxxs1.jpg";
+	private String zxxs0 = "images\\mnks\\zxxs1.png";
+	private String zxxs1 = "images\\mnks\\zxxs4.png";
+	private String zxxs2 = "images\\mnks\\zxxs3.png";
+	private String zxxs3 = "images\\mnks\\zxxs2.png";
 	
-	private String jjdw0 = "images\\mnks\\jjdw3.jpg";
-	private String jjdw1 = "images\\mnks\\jjdw4.jpg";
-	private String jjdw2 = "images\\mnks\\jjdw2.jpg";
-	private String jjdw3 = "images\\mnks\\jjdw1.jpg";
+	private String jjdw0 = "images\\mnks\\jjdw1.png";
+	private String jjdw1 = "images\\mnks\\jjdw4.png";
+	private String jjdw2 = "images\\mnks\\jjdw3.png";
+	private String jjdw3 = "images\\mnks\\jjdw2.png";
 	
-	private String bgcd0 = "images\\mnks\\bgcd3.jpg";
-	private String bgcd1 = "images\\mnks\\bgcd4.jpg";
-	private String bgcd2 = "images\\mnks\\bgcd2.jpg";
-	private String bgcd3 = "images\\mnks\\bgcd1.jpg";
+	private String bgcd0 = "images\\mnks\\bgcd1.png";
+	private String bgcd1 = "images\\mnks\\bgcd4.png";
+	private String bgcd2 = "images\\mnks\\bgcd3.png";
+	private String bgcd3 = "images\\mnks\\bgcd2.png";
 	
-	private String kbtc0 = "images\\mnks\\kbtc3.jpg";
-	private String kbtc1 = "images\\mnks\\kbtc4.jpg";
-	private String kbtc2 = "images\\mnks\\kbtc2.jpg";
-	private String kbtc3 = "images\\mnks\\kbtc1.jpg";
+	private String kbtc0 = "images\\mnks\\kbtc1.png";
+	private String kbtc1 = "images\\mnks\\kbtc4.png";
+	private String kbtc2 = "images\\mnks\\kbtc3.png";
+	private String kbtc3 = "images\\mnks\\kbtc2.png";
 	
-	private String lkzx0 = "images\\mnks\\lkzx3.jpg";
-	private String lkzx1 = "images\\mnks\\lkzx4.jpg";
-	private String lkzx2 = "images\\mnks\\lkzx2.jpg";
-	private String lkzx3 = "images\\mnks\\lkzx1.jpg";
+	private String lkzx0 = "images\\mnks\\lkzx1.png";
+	private String lkzx1 = "images\\mnks\\lkzx4.png";
+	private String lkzx2 = "images\\mnks\\lkzx3.png";
+	private String lkzx3 = "images\\mnks\\lkzx2.png";
 	
-	private String lkzz0 = "images\\mnks\\lkzz3.jpg";
-	private String lkzz1 = "images\\mnks\\lkzz4.jpg";
-	private String lkzz2 = "images\\mnks\\lkzz2.jpg";
-	private String lkzz3 = "images\\mnks\\lkzz1.jpg";
+	private String lkzz0 = "images\\mnks\\lkzz1.png";
+	private String lkzz1 = "images\\mnks\\lkzz4.png";
+	private String lkzz2 = "images\\mnks\\lkzz3.png";
+	private String lkzz3 = "images\\mnks\\lkzz2.png";
 	
-	private String lkyz0 = "images\\mnks\\lkyz3.jpg";
-	private String lkyz1 = "images\\mnks\\lkyz4.jpg";
-	private String lkyz2 = "images\\mnks\\lkyz2.jpg";
-	private String lkyz3 = "images\\mnks\\lkyz1.jpg";
+	private String lkyz0 = "images\\mnks\\lkyz1.png";
+	private String lkyz1 = "images\\mnks\\lkyz4.png";
+	private String lkyz2 = "images\\mnks\\lkyz3.png";
+	private String lkyz3 = "images\\mnks\\lkyz2.png";
 	
-	private String rxhd0 = "images\\mnks\\rxhd3.jpg";
-	private String rxhd1 = "images\\mnks\\rxhd4.jpg";
-	private String rxhd2 = "images\\mnks\\rxhd2.jpg";
-	private String rxhd3 = "images\\mnks\\rxhd1.jpg";
+	private String rxhd0 = "images\\mnks\\rxhd1.png";
+	private String rxhd1 = "images\\mnks\\rxhd4.png";
+	private String rxhd2 = "images\\mnks\\rxhd3.png";
+	private String rxhd3 = "images\\mnks\\rxhd2.png";
 	
-	private String xxqy0 = "images\\mnks\\xxqy3.jpg";
-	private String xxqy1 = "images\\mnks\\xxqy4.jpg";
-	private String xxqy2 = "images\\mnks\\xxqy2.jpg";
-	private String xxqy3 = "images\\mnks\\xxqy1.jpg";
+	private String xxqy0 = "images\\mnks\\xxqy1.png";
+	private String xxqy1 = "images\\mnks\\xxqy4.png";
+	private String xxqy2 = "images\\mnks\\xxqy3.png";
+	private String xxqy3 = "images\\mnks\\xxqy2.png";
 	
-	private String ggcz0 = "images\\mnks\\ggcz3.jpg";
-	private String ggcz1 = "images\\mnks\\ggcz4.jpg";
-	private String ggcz2 = "images\\mnks\\ggcz2.jpg";
-	private String ggcz3 = "images\\mnks\\ggcz1.jpg";
+	private String ggcz0 = "images\\mnks\\ggcz1.png";
+	private String ggcz1 = "images\\mnks\\ggcz4.png";
+	private String ggcz2 = "images\\mnks\\ggcz3.png";
+	private String ggcz3 = "images\\mnks\\ggcz2.png";
 	
-	private String hc0 = "images\\mnks\\hc3.jpg";
-	private String hc1 = "images\\mnks\\hc4.jpg";
-	private String hc2 = "images\\mnks\\hc2.jpg";
-	private String hc3 = "images\\mnks\\hc1.jpg";
+	private String hc0 = "images\\mnks\\hc1.png";
+	private String hc1 = "images\\mnks\\hc4.png";
+	private String hc2 = "images\\mnks\\hc3.png";
+	private String hc3 = "images\\mnks\\hc2.png";
 	
-	private String cc0 = "images\\mnks\\cc3.jpg";
-	private String cc1 = "images\\mnks\\cc4.jpg";
-	private String cc2 = "images\\mnks\\cc2.jpg";
-	private String cc3 = "images\\mnks\\cc1.jpg";
+	private String cc0 = "images\\mnks\\cc1.png";
+	private String cc1 = "images\\mnks\\cc4.png";
+	private String cc2 = "images\\mnks\\cc3.png";
+	private String cc3 = "images\\mnks\\cc2.png";
 	
-	private String dt0 = "images\\mnks\\dt3.jpg";
-	private String dt1 = "images\\mnks\\dt4.jpg";
-	private String dt2 = "images\\mnks\\dt2.jpg";
-	private String dt3 = "images\\mnks\\dt1.jpg";
+	private String dt0 = "images\\mnks\\dt1.png";
+	private String dt1 = "images\\mnks\\dt4.png";
+	private String dt2 = "images\\mnks\\dt3.png";
+	private String dt3 = "images\\mnks\\dt2.png";
 	
-	private String yjxs0 = "images\\mnks\\yjxs3.jpg";
-	private String yjxs1 = "images\\mnks\\yjxs4.jpg";
-	private String yjxs2 = "images\\mnks\\yjxs2.jpg";
-	private String yjxs3 = "images\\mnks\\yjxs1.jpg";
+	private String yjxs0 = "images\\mnks\\yjxs1.png";
+	private String yjxs1 = "images\\mnks\\yjxs4.png";
+	private String yjxs2 = "images\\mnks\\yjxs3.png";
+	private String yjxs3 = "images\\mnks\\yjxs2.png";
+	
+	private String dgmn0 = "images\\mnks\\dgmn1.png";
+	private String dgmn1 = "images\\mnks\\dgmn4.png";
+	private String dgmn2 = "images\\mnks\\dgmn3.png";
+	private String dgmn3 = "images\\mnks\\dgmn2.png";
 	
 	private ImageIcon sczb0Icon; 
 	private ImageIcon sczb1Icon;
@@ -165,6 +170,12 @@ public class SimuteIcon {
 	private ImageIcon yjxs1Icon; 
 	private ImageIcon yjxs2Icon; 
 	private ImageIcon yjxs3Icon;
+	
+	private ImageIcon dgmn0Icon;
+	private ImageIcon dgmn1Icon;
+	private ImageIcon dgmn2Icon;
+	private ImageIcon dgmn3Icon;
+	
 	public SimuteIcon() {
 		sczb0Icon= new ImageIcon(sczb0); 
 		sczb1Icon= new ImageIcon(sczb1);
@@ -245,7 +256,26 @@ public class SimuteIcon {
 		yjxs1Icon= new ImageIcon(yjxs1); 
 		yjxs2Icon= new ImageIcon(yjxs2); 
 		yjxs3Icon= new ImageIcon(yjxs3);
+		
+		dgmn0Icon= new ImageIcon(dgmn0); 
+		dgmn1Icon= new ImageIcon(dgmn1); 
+		dgmn2Icon= new ImageIcon(dgmn2); 
+		dgmn3Icon= new ImageIcon(dgmn3); 
 	}
+	
+	public ImageIcon getDgmn0Icon(){
+		return dgmn0Icon;
+	}
+	public ImageIcon getDgmn1Icon(){
+		return dgmn1Icon;
+	}
+	public ImageIcon getDgmn2Icon(){
+		return dgmn2Icon;
+	}
+	public ImageIcon getDgmn3Icon(){
+		return dgmn3Icon;
+	}
+	
 	public ImageIcon getSczb0Icon() {
 		return sczb0Icon;
 	}

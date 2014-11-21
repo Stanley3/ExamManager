@@ -50,7 +50,7 @@ public class SystemDetectFrm extends JFrame {
 	JLabel lab_signal_clutchpedal= new JLabel("");
 	JLabel lab_signal_handbrake= new JLabel("");
 	JLabel lab_signal_horn= new JLabel("");
-	JLabel lab_signal_acc= new JLabel("");
+//	JLabel lab_signal_acc= new JLabel("");
 	JLabel lab_signal_off= new JLabel("");
 	JLabel lab_signal_carsidea= new JLabel("");
 	JLabel lab_signal_carsideb= new JLabel("");
@@ -158,8 +158,6 @@ public class SystemDetectFrm extends JFrame {
 						- bottomPanel.getHeight());
 		getContentPane().add(midPanel);
 		midPanel.setLayout(new GridLayout(8, 4, 0, 0));
-
-
 		
 		JPanelUtils.compCombine(midPanel, this.lab_lamp_width, "Ê¾¿íµÆ", allImage.getSwitchcloseIcon(), rect, font);
 		JPanelUtils.compCombine(midPanel, this.lab_lamp_near, "½ü¹âµÆ", allImage.getSwitchcloseIcon(), rect, font);
@@ -173,7 +171,7 @@ public class SystemDetectFrm extends JFrame {
 		JPanelUtils.compCombine(midPanel, this.lab_signal_life, "°²È«´ø", allImage.getSwitchcloseIcon(), rect, font);
 		JPanelUtils.compCombine(midPanel, this.lab_lamp_brake, "½Å   É²", allImage.getSwitchcloseIcon(), rect, font);
 		JPanelUtils.compCombine(midPanel, this.lab_signal_rightbrake, "¸±½ÅÉ²", allImage.getSwitchcloseIcon(), rect, font);
-		JPanelUtils.compCombine(midPanel, this.lab_signal_acc, " ACC ", allImage.getSwitchcloseIcon(), rect, font);
+	//	JPanelUtils.compCombine(midPanel, this.lab_signal_acc, " ACC ", allImage.getSwitchcloseIcon(), rect, font);
 		JPanelUtils.compCombine(midPanel, this.lab_signal_off, "Ï¨   »ð", allImage.getSwitchcloseIcon(), rect, font);
 		JPanelUtils.compCombine(midPanel, this.lab_signal_horn, "À®   °È", allImage.getSwitchcloseIcon(), rect, font);
 		JPanelUtils.compCombine(midPanel, this.lab_signal_clutchpedal, "ÀëºÏÆ÷", allImage.getSwitchcloseIcon(), rect, font);
@@ -461,13 +459,13 @@ public class SystemDetectFrm extends JFrame {
 					SystemDetectFrm.this.lab_signal_horn
 							.setIcon(ConfigManager.allImage
 									.getSwitchcloseIcon());
-				if (carSignal.signal_acc)
-					SystemDetectFrm.this.lab_signal_acc
-							.setIcon(ConfigManager.allImage.getSwithopenIcon());
-				else
-					SystemDetectFrm.this.lab_signal_acc
-							.setIcon(ConfigManager.allImage
-									.getSwitchcloseIcon());
+//				if (carSignal.signal_acc)
+//					SystemDetectFrm.this.lab_signal_acc
+//							.setIcon(ConfigManager.allImage.getSwithopenIcon());
+//				else
+//					SystemDetectFrm.this.lab_signal_acc
+//							.setIcon(ConfigManager.allImage
+//									.getSwitchcloseIcon());
 				if (carSignal.signal_off)
 					SystemDetectFrm.this.lab_signal_off
 							.setIcon(ConfigManager.allImage.getSwithopenIcon());

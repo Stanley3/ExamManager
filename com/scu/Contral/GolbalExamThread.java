@@ -77,17 +77,25 @@ public class GolbalExamThread extends ModuleThread {
 	private long gearchangetime = 0L;
 	private int nogear0 = 0;
 	private int pre0Gear = 0;
-
+	private int iGear=0;
+	//判断速度是否匹配
+	private boolean noMatch=false;
+	//当前速度
+	private double curspeed=0.0;
 	public GolbalExamThread(ExamWindow window, int moduleFlag) {
 		super(window, moduleFlag);
 	}
-
 	public synchronized void run() {
 		try {
 			while (this.runFlag) {
 				try {
 					// �?��评判时间（延迟评判）
-					if (System.currentTimeMillis() - this.startTime > 10000L) {
+					if(super.moduleFlag==2){
+						if (System.currentTimeMillis() - this.startTime > 10000L) {
+							Thread.sleep(200L);
+							execute();
+						}
+					}else{
 						Thread.sleep(200L);
 						execute();
 					}
@@ -124,6 +132,38 @@ public class GolbalExamThread extends ModuleThread {
 						.getMaxSpeed())) {
 			this.isHighFouth = true;
 		}
+		if (JudgeSignal.getInstance().signal_clutchpedal)// 离合器信�?
+		this.iGear = curGear;
+		/* 按照当前档位进行判断是否和当前�?度匹�?*/
+		switch (this.iGear) {
+		case 1:
+			if (this.curspeed <= ConfigManager.plusSubstractDang.getMaxDang1())
+				break;
+			this.noMatch = true;
+			break;
+		case 2:
+			if (this.curspeed <= ConfigManager.plusSubstractDang.getMaxDang2())
+				break;
+			this.noMatch = true;
+			break;
+		case 3:
+			if ((this.curspeed <= ConfigManager.plusSubstractDang.getMaxDang3())
+					&& (this.curspeed >= ConfigManager.plusSubstractDang
+							.getMinDang3()))
+				break;
+			this.noMatch = true;
+			break;
+		case 4:
+			if (this.curspeed >= ConfigManager.plusSubstractDang.getMinDang4())
+				break;
+			this.noMatch = true;
+			break;
+		case 5:
+			if (this.curspeed >= ConfigManager.plusSubstractDang.getMinDang5())
+				break;
+			this.noMatch = true;
+			break;
+		}
 		/**
 		 * 车�?不为零时，进行一系列判断
 		 * */
@@ -157,23 +197,23 @@ public class GolbalExamThread extends ModuleThread {
 			this.noGearStartTime = System.currentTimeMillis();
 		}
 		/**
-		 * 判断该判断模块是否改�?
+		 * 判断一档二档行驶的距离
 		 */
-		if (this.carSignal.gear != this.preGear) {
-			// 刚启�?
-			this.preGear = this.carSignal.gear;
-			this.gearDistince = 0.0D;
-		} else {
-			this.gearDistince += Tools.getDistinceByOBDV(
-					this.carSignal.gpsspeed, 200);
-			if ((this.preGear == 1)
-					&& (this.gearDistince > ConfigManager.addClass.CARPARM_GOLBAL_1DJL))
-				this.gear12noMatch = true;
-			if ((this.preGear == 2)
-					&& (this.gearDistince > ConfigManager.addClass.CARPARM_GOLBAL_2DJL)) {
-				this.gear12noMatch = true;// 1�?档不匹配
-			}
-		}
+//		if (this.carSignal.gear != this.preGear) {
+//			// 刚启�?
+//			this.preGear = this.carSignal.gear;
+//			this.gearDistince = 0.0D;
+//		} else {
+//			this.gearDistince += Tools.getDistinceByOBDV(
+//					this.carSignal.gpsspeed, 200);
+//			if ((this.preGear == 1)
+//					&& (this.gearDistince > ConfigManager.addClass.CARPARM_GOLBAL_1DJL))
+//				this.gear12noMatch = true;
+//			if ((this.preGear == 2)
+//					&& (this.gearDistince > ConfigManager.addClass.CARPARM_GOLBAL_2DJL)) {
+//				this.gear12noMatch = true;// 1�?档不匹配
+//			}
+//		}
 		/**
 		 * 判断通用评判中的转向灯信号以及持续的时间
 		 */
@@ -220,7 +260,7 @@ public class GolbalExamThread extends ModuleThread {
 				this.turnLightTime += 200L;
 			}
 			//--------------------------------------------------------
-			if (this.turnlightOffStartTime >=  ConfigManager.commonConfig.getCARPARM_GOLBAL_ZDDBGBJL()) {
+			if (this.turnLightTime >=  ConfigManager.commonConfig.getOpenTurnLightTime()) {
 				sendMessage("30206", 20);
 				this.turnLight3S = false;
 			}
@@ -261,7 +301,7 @@ public class GolbalExamThread extends ModuleThread {
 
 	public void judge() {
 		/* 不按规定使用安全带或者安全头�?*/
-		if ((!this.drive_30101) && (!this.carSignal.signal_seatbelt)) {
+		if ((!this.drive_30101) && (this.carSignal.signal_seatbelt)) {
 			this.drive_30101 = true;
 			sendMessage("30101", 20);
 		}

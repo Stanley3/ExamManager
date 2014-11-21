@@ -140,7 +140,7 @@ public class LineEditFrm extends ExamWindow {
 		JLabel lblNewLabel = new JLabel("项目");
 		lblNewLabel.setHorizontalAlignment(0);
 		lblNewLabel.setForeground(Color.WHITE);
-		lblNewLabel.setFont(new Font("华文中宋", 1, 14));
+		lblNewLabel.setFont(new Font("宋体", Font.PLAIN, 14));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.fill = 2;
@@ -151,7 +151,7 @@ public class LineEditFrm extends ExamWindow {
 		JLabel lblLon = new JLabel("LON");
 		lblLon.setHorizontalAlignment(0);
 		lblLon.setForeground(Color.WHITE);
-		lblLon.setFont(new Font("华文中宋", 1, 14));
+		lblLon.setFont(new Font("宋体", Font.PLAIN, 14));
 		GridBagConstraints gbc_lblLon = new GridBagConstraints();
 		gbc_lblLon.insets = new Insets(0, 0, 5, 5);
 		gbc_lblLon.fill = 2;
@@ -162,7 +162,7 @@ public class LineEditFrm extends ExamWindow {
 		JLabel lblLat = new JLabel("LAT");
 		lblLat.setHorizontalAlignment(0);
 		lblLat.setForeground(Color.WHITE);
-		lblLat.setFont(new Font("华文中宋", 1, 14));
+		lblLat.setFont(new Font("宋体", Font.PLAIN, 14));
 		GridBagConstraints gbc_lblLat = new GridBagConstraints();
 		gbc_lblLat.insets = new Insets(0, 0, 5, 0);
 		gbc_lblLat.fill = 2;
@@ -173,7 +173,7 @@ public class LineEditFrm extends ExamWindow {
 		JLabel label = new JLabel("角度");
 		label.setHorizontalAlignment(0);
 		label.setForeground(Color.WHITE);
-		label.setFont(new Font("华文中宋", 1, 14));
+		label.setFont(new Font("宋体", Font.PLAIN, 14));
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.insets = new Insets(0, 0, 0, 5);
 		gbc_label.gridx = 3;
@@ -189,7 +189,7 @@ public class LineEditFrm extends ExamWindow {
 		this.et_Model = new lineTable_Model(this.linelist);
 		this.lineTable = new LineJTable(this.et_Model);
 		this.lineTable.hideHeader();
-		this.lineTable.setFont(new Font("华文中宋", 1, 12));
+		this.lineTable.setFont(new Font("宋体", Font.PLAIN, 14));
 		this.lineTable.setRowHeight(30);
 		this.lineTable.setOpaque(false);
 		this.lineTable.setColumnWidth(0, 120);
@@ -237,6 +237,10 @@ public class LineEditFrm extends ExamWindow {
 				- panel_1.getWidth() - panel.getWidth(), 400);
 
 		this.typelist = new JList();
+		this.typelist.setFont(new Font("宋体", Font.PLAIN, 14));
+		this.typelist.setSelectionMode(0);
+		this.typelist.setFixedCellHeight(25);
+		scrollPane_1.setViewportView(this.typelist);
 		this.typelist.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent e) {
 				int rowI = LineEditFrm.this.typelist.getSelectedIndex();
@@ -248,9 +252,6 @@ public class LineEditFrm extends ExamWindow {
 						LineEditFrm.this.typeids[rowI]);
 			}
 		});
-		this.typelist.setFont(new Font("微软雅黑", 1, 18));
-		this.typelist.setSelectionMode(0);
-		scrollPane_1.setViewportView(this.typelist);
 		initType();
 
 		JPanel panel_7 = new JPanel();

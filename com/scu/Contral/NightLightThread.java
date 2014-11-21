@@ -35,10 +35,12 @@ public class NightLightThread extends ModuleThread implements
 	private Player player;
 	/* 等待时间，多长时间开启什么灯 */
 	private int waitTime = 5000;
-	private int highbeamCount=0;
+	private int lamp_onbeamCount=0;
+	private int lamp_offbeamCount=0;
 	public NightLightThread(ExamWindow window, int moduleFlag) {
 		super(window, moduleFlag);
 		this.mp3rootpath = "./mp3/";
+		this.setName("nightThread" + this.getName());
 	}
 
 	public void controllerUpdate(ControllerEvent ce) {
@@ -97,6 +99,7 @@ public class NightLightThread extends ModuleThread implements
 			for (int i = 0; i < this.curTest.length; i++) {
 				if (!this.runFlag)
 					break;
+				System.out.println(this.runFlag);
 				try {
 					this.curCarSignal = (this.lastCarSignal = null);
 					this.curId = this.curTest[i];
@@ -124,7 +127,6 @@ public class NightLightThread extends ModuleThread implements
 					}
 					this.canRead = false;
 					judge();
-					this.highbeamCount = 0;//自动清零计数器
 				} catch (Exception e) {
 					e.printStackTrace();
 					break;
@@ -146,8 +148,12 @@ public class NightLightThread extends ModuleThread implements
 				add(this.curCarSignal, this.lastCarSignal);
 				if(this.lastCarSignal.lamp_highbeam)
 				{
-					this.highbeamCount++;
-					this.lastCarSignal.lamp_urgent=false;
+					this.lamp_onbeamCount++;
+					//this.lastCarSignal.lamp_urgent=false;
+				}
+				if(!this.curCarSignal.lamp_highbeam)
+				{
+					this.lamp_offbeamCount++;
 				}
 			}
 			else
@@ -165,7 +171,7 @@ public class NightLightThread extends ModuleThread implements
 		cur.signal_clutchpedal |= last.signal_clutchpedal;
 	}
 
-	/*   true 表示都关闭 false表示有灯没关  */
+	/*     */
 	private boolean allLightDown(JudgeSignal carSignal) {
 		boolean isAllDown = true;
 		if (carSignal != null) {
@@ -178,9 +184,9 @@ public class NightLightThread extends ModuleThread implements
 
 	public void judge() {
 		switch (this.curId) {
-		case 1://灯光考试
+		case 1://�?��灯光考试
 			if ((this.curCarSignal == null) || (this.lastCarSignal == null)) {
-				/* 不能正确使用灯光 */
+				/* 不能正确�?��灯光 */
 				sendMessage("41601", 41);
 			}
 			else
@@ -197,8 +203,8 @@ public class NightLightThread extends ModuleThread implements
 			}
 			break;
 		case 3://夜间会车
-			if (!this.lastCarSignal.lamp_near) {
-				sendMessage("41609", 13);
+			if (!this.lastCarSignal.lamp_near||this.lastCarSignal.lamp_highbeam) {
+				sendMessage("41604", 13);
 			}
 			break;
 		case 4://路口转弯
@@ -223,13 +229,13 @@ public class NightLightThread extends ModuleThread implements
 			judgeDooubleSwitch();
 			break;
 		case 11://考试完成
-			if (!allLightDown(this.lastCarSignal)) {
+			if (allLightDown(this.lastCarSignal)) {
 				sendMessage("41601", 41);
 			} 
 			break;
 		case 12://照明不良
 			if (!this.lastCarSignal.lamp_highbeam)
-				sendMessage("41601", 41);
+				sendMessage("41609", 41);
 			break;
 		}
 	}
@@ -238,9 +244,10 @@ public class NightLightThread extends ModuleThread implements
 	 */
 	public void judgeDooubleSwitch()
 	{
-		if (this.highbeamCount<2) {
-			sendMessage("41609", 13);
+		if (this.lamp_onbeamCount<2||this.lamp_offbeamCount<2) {
+			sendMessage("41603", 13);
 		}
-		this.highbeamCount=0;
+		this.lamp_onbeamCount=0;
+		this.lamp_offbeamCount=0;
 	}
 }

@@ -75,7 +75,7 @@ public class LightListDialog extends JDialog {
 		panel1.add(lblNewLabel);
 
 		this.titleLabel = new JLabel(this.title);
-		this.titleLabel.setFont(new Font("Î¢ÈíÑÅºÚ", 1, 22));
+		this.titleLabel.setFont(new Font("ºÚÌå", Font.BOLD, 22));
 		this.titleLabel.setForeground(Color.WHITE);
 		panel1.add(this.titleLabel);
 
@@ -138,8 +138,7 @@ public class LightListDialog extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				LightListDialog.this.closeActionPerformed(arg0);
 				int selected = LightListDialog.this.list.getSelectedIndex();
-				LightListDialog.this.examWindow
-						.startItem(LightListDialog.this.lampid[selected]);
+				LightListDialog.this.examWindow.startItem(LightListDialog.this.lampid[selected]);
 			}
 		});
 	}

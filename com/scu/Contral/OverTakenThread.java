@@ -13,19 +13,19 @@ public class OverTakenThread extends ModuleThread {
 	private int iState = 1;
 	/* 起步、转向�?变更车道、超车�?停车前不使用或错误使用转向灯 */
 	private boolean overtaken_30205 = false;
-	/* 起步、转向�?变更车道、超车�?停车前，�?��向灯少于3s即转�?*/
+	/* 起步、转向�?变更车道、超车�?停车前，�?��向灯少于3s即转�?*/
 	private boolean overtaken_30206 = false;
-	/* 在没有中心线或同方向只有�?��行车道的道路上从右侧超车 */
+	/* 在没有中心线或同方向只有�?��行车道的道路上从右侧超车 */
 	private boolean overtaken_41406 = false;
-	/* 不按考试员指令驾�?*/
+	/* 不按考试员指令驾�?*/
 	private boolean overtaken_30103 = false;
-	/* 转向灯开启时�?*/
+	/* 转向灯开启时�?*/
 	private long turnLightTime = 0;
 	public static double RANGETIGGER = ConfigManager.overCar
 			.getTriggerDistance();
-	/* 左转向灯是否�?�� */
+	/* 左转向灯是否�?�� */
 	private boolean turnleftlight = false;
-	/* 右转向灯是否�?�� */
+	/* 右转向灯是否�?�� */
 	private boolean turnrightlight = false;
 	/* 左转标记 */
 	private boolean turnleft = false;
@@ -107,7 +107,7 @@ public class OverTakenThread extends ModuleThread {
 			this.turnright = false;
 		}
 		/**
-		 *  这个根本就没有判定时�?*/
+		 *  这个根本就没有判定时�?*/
 		switch (this.iState) {
 		case 1:
 			if (this.turnleft) {
@@ -175,7 +175,7 @@ public class OverTakenThread extends ModuleThread {
 			{
 				this.iState = 5;
 				MediaPlay.getInstance().play("cc_shycd.wav");
-				// 请驾驶回原车�?
+				// 请驾驶回原车�?
 			}
 			break;
 		case 5:
@@ -218,7 +218,6 @@ public class OverTakenThread extends ModuleThread {
 				}
 				this.iState = 9;
 			}
-
 			break;
 		case 7:
 			if (!(this.turnleft) && !(this.turnright))
@@ -246,7 +245,6 @@ public class OverTakenThread extends ModuleThread {
 			break;
 		}
 	}
-
 	public void judge() {
 		if (!ConfigManager.overCar.isOpen())
 			return;

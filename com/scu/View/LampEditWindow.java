@@ -133,7 +133,7 @@ public class LampEditWindow extends ExamWindow {
 		JLabel item = new JLabel("项目");
 		item.setHorizontalAlignment(JLabel.CENTER);
 		item.setForeground(Color.WHITE);
-		item.setFont(new Font("华文中宋", 1, 14));
+		item.setFont(new Font("宋体", Font.PLAIN, 14));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.fill = 2;
 		gbc_lblNewLabel.gridx = 0;
@@ -143,7 +143,7 @@ public class LampEditWindow extends ExamWindow {
 		JLabel content = new JLabel("内容");
 		content.setHorizontalAlignment(0);
 		content.setForeground(Color.WHITE);
-		content.setFont(new Font("华文中宋", 1, 14));
+		content.setFont(new Font("宋体", Font.PLAIN, 14));
 		GridBagConstraints gbc_label_9 = new GridBagConstraints();
 		gbc_label_9.fill = 2;
 		gbc_label_9.gridx = 1;
@@ -153,7 +153,7 @@ public class LampEditWindow extends ExamWindow {
 		JLabel times = new JLabel("间隔时间(秒)");
 		times.setHorizontalAlignment(0);
 		times.setForeground(Color.WHITE);
-		times.setFont(new Font("华文中宋", 1, 14));
+		times.setFont(new Font("宋体", Font.PLAIN, 14));
 		GridBagConstraints gbc_label_10 = new GridBagConstraints();
 		gbc_label_10.insets = new Insets(0, 0, 5, 0);
 		gbc_label_10.fill = 2;
@@ -173,7 +173,7 @@ public class LampEditWindow extends ExamWindow {
 		this.et_Model = new lampTable_Model(this.lamplist);
 		this.lampTable = new LampJTable(this.et_Model);
 		this.lampTable.hideHeader();
-		this.lampTable.setFont(new Font("华文中宋", 1, 12));
+		this.lampTable.setFont(new Font("宋体", Font.PLAIN, 12));
 		this.lampTable.setRowHeight(30);
 		this.lampTable.setOpaque(false);
 		this.lampTable.setColumnWidth(0, 60);
@@ -220,7 +220,7 @@ public class LampEditWindow extends ExamWindow {
 		this.lamptypeTable
 				.setPreferredSize(new Dimension(panel.getWidth(), 400));
 		this.lamptypeTable.hideHeader();
-		this.lamptypeTable.setFont(new Font("华文中宋", 1, 12));
+		this.lamptypeTable.setFont(new Font("宋体", Font.PLAIN, 12));
 		this.lamptypeTable.setRowHeight(25);
 		this.lamptypeTable.setOpaque(false);
 		this.lamptypeTable.setColumnWidth(0, 80);
@@ -377,7 +377,7 @@ public class LampEditWindow extends ExamWindow {
 		button_3.setRolloverIcon(ConfigManager.allImage.getBack_touchIcon());
 		button_3.setIcon(ConfigManager.allImage.getBackIcon());
 		button_3.setMargin(new Insets(2, 2, 2, 2));
-		button_3.setFont(new Font("华文中宋", 1, 26));
+		button_3.setFont(new Font("宋体", Font.PLAIN, 26));
 		button_3.setContentAreaFilled(false);
 		button_3.setBorderPainted(false);
 		panel_7.add(button_3);

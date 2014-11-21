@@ -23,12 +23,13 @@ public class PrepareThread extends ModuleThread {
 		this.iTimeOut = ConfigManager.abordPrepare.getEndTime();
 		RANGETIGGER = ConfigManager.abordPrepare.getTriggerDistance();
 		this.seq = ConfigManager.abordPrepare.getAround();
+		this.setName("prepareThread" + this.activeCount());
 	}
 
 	public synchronized void run() {
 		try {
-			if (this.moduleFlag == ModuleThread.TRAINFLAG)
-				MediaPlay.getInstance().play("sczb.wav");
+		//	if (this.moduleFlag == ModuleThread.TRAINFLAG)
+			MediaPlay.getInstance().play("sczb.wav");
 			Thread curt = Thread.currentThread();
 			this.isPause = false;
 			while (this.runFlag)

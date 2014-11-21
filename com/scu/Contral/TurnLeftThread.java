@@ -84,8 +84,9 @@ public class TurnLeftThread extends ModuleThread {
 			angle += 360;
 		this.turnAngle = angle;
 		switch (this.iState) {
-		case 1:
-			if ((this.turnAngle > 30) || (this.turnAngle < -30)) {
+		case 1:/*修改*/
+			if ((this.turnAngle > ConfigManager.turnLeft.getMinAngle()) || (this.turnAngle < -ConfigManager.turnLeft.getMinAngle())) 
+			{
 				this.iState = 3;
 				if (!this.turnleft) {
 					if ((!ConfigManager.turnLeft.isOpen())
@@ -102,7 +103,6 @@ public class TurnLeftThread extends ModuleThread {
 					this.turnleft_30206 = true;
 					sendMessage("30206", 15);
 				}
-
 			} else if (this.turnLightTime >= ConfigManager.commonConfig
 					.getTurnLightWaitTime()) {
 				this.iState = 2;
@@ -118,16 +118,13 @@ public class TurnLeftThread extends ModuleThread {
 				else {
 					this.turnLightTime += 200;
 				}
-
 			}
-
 			break;
 		case 2:
 			if (this.turnAngle >= -MAX_ANGLE)
 				break;
 			this.iState = 3;
 			this.runFlag = false;
-
 			break;
 		}
 	}

@@ -210,6 +210,7 @@ public class AboardPrepareListenerDialog implements ActionListener{
 				} else {
 					int triggerDistanceValue = Integer.parseInt(triggerDistanceString);
 					ConfigManager.abordPrepare.setTriggerDistance(triggerDistanceValue);
+		//			System.out.println("--------------------------------------->"+triggerDistanceValue);
 				}
 				
 				boolean aroundTurn = fblf.isSelected();

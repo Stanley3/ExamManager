@@ -85,7 +85,7 @@ public class TurnRightThread extends ModuleThread {
 		this.turnAngle = angle;
 		switch (this.iState) {
 		case 1:
-			if ((this.turnAngle > 30) || (this.turnAngle < -30)) {
+			if ((this.turnAngle > this.MAX_ANGLE) || (this.turnAngle < -this.MAX_ANGLE)) {
 				this.iState = 3;
 				if (!this.turnright) {
 					if ((!ConfigManager.turnRight.isOpen())
@@ -143,17 +143,16 @@ public class TurnRightThread extends ModuleThread {
 		} else if ((ConfigManager.autoJadge.isNeedBrake()) && (!this.isBreak)) {
 			sendMessage("40901", 16);
 		}
-
-		if (ConfigManager.addClass.isYkms()) {
-			if ((!this.drive_41605) && (this.lastHightLight)) {
-				this.drive_41605 = true;
-				sendMessage("41605", 13);
-			}
-			if ((!this.drive_41603)
-					&& ((!this.isOpenHighLight) || (!this.isNearLight))) {
-				this.drive_41603 = true;
-				sendMessage("41603", 13);
-			}
-		}
+//		if (ConfigManager.addClass.isYkms()) {
+//			if ((!this.drive_41605) && (this.lastHightLight)) {
+//				this.drive_41605 = true;
+//				sendMessage("41605", 13);
+//			}
+//			if ((!this.drive_41603)
+//					&& ((!this.isOpenHighLight) || (!this.isNearLight))) {
+//				this.drive_41603 = true;
+//				sendMessage("41603", 13);
+//			}
+//		}
 	}
 }

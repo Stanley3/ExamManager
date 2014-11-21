@@ -160,7 +160,6 @@ public class SettingFrm extends JFrame{
 		fh.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new MainWindow("Â·¿¼Íõ");
 				SettingFrm.this.dispose();
 			}
 		});

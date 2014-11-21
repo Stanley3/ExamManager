@@ -15,7 +15,7 @@ import javax.swing.ImageIcon;
 
 public class ImageIconSet {
 	/*********************************Ö÷´°¿Ú±³¾°Í¼Æ¬**********************************************/
-	public static final String bg = "images\\icons\\bg.png";
+	public static final String bg = "images\\main\\bg.png";
 	public static final String title = "images\\icons\\title_icon.png";
 	//Ä£Äâ¿¼ÊÔ°´Å¥Í¼Æ¬
 	public static final String mnks = "images\\icons\\mnks.png";

@@ -98,7 +98,7 @@ public class CommonConfig extends ConfigFather{
 		return openTurnLightTime;
 	}
 	public void setOpenTurnLightTime(long openTurnLightTime) {
-		dbHelper.updateConfig("golbal_zxdbgbsj",repeatPoint+"");
+		dbHelper.updateConfig("golbal_zxdbgbsj",openTurnLightTime+"");
 		this.openTurnLightTime = openTurnLightTime;
 	}
 	public int getExamLength() {

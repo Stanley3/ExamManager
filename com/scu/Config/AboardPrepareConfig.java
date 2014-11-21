@@ -3,7 +3,6 @@ package com.scu.Config;
  * 起步配置类
  * 作者：孙晓雨 2014.10.9
  */
-import com.scu.Utils.DBHelper;
 public class AboardPrepareConfig extends ConfigFather{
 	private static AboardPrepareConfig instance= null;
 	//以下为需要初始化的参数
@@ -103,7 +102,7 @@ public class AboardPrepareConfig extends ConfigFather{
 		return around;
 	}
 	public void setAround(int around) {
-		dbHelper.updateConfig("prepare_cfjl",around+"");
+		dbHelper.updateConfig("prepare_rcsx",around+"");
 		this.around = around;
 	}
 }

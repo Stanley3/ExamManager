@@ -54,7 +54,7 @@ public class JudgeSignal
    /**
     * 安全带插入信号，true表示未插入，false表示安全带插入
     */
-   public boolean signal_seatbelt = true;
+   public boolean signal_seatbelt = false;
    /**
     * 离合器信号， false表示松开离合器，true表示踩下离合器
     */
@@ -123,7 +123,7 @@ public class JudgeSignal
     */
    public double gpsangle = 0;
    /**
-    * 车辆的速度值，单位米每秒(m/s)
+    * 车辆的速度值，单位km/h(km/h)
     */
    public double gpsspeed = 0.0D;
    /**

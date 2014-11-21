@@ -8,7 +8,25 @@ import javax.swing.ImageIcon;
  *
  */
 public class SignalIcon {
-
+	//GPS开关图标
+	public static final String gpsg = "images\\light\\gpsoff.jpg";
+	public static final String gpsk = "images\\light\\gpson.jpg";
+	//网络关和开图标
+	public static final String wlg = "images\\light\\netoff.jpg";
+	public static final String wlk = "images\\light\\neton.jpg";
+	//档位图标
+	public static final String dk = "images\\light\\n.jpg";
+	public static final String d1 = "images\\light\\1.jpg";
+	public static final String d2 = "images\\light\\2.jpg";
+	public static final String d3 = "images\\light\\3.jpg";
+	public static final String d4 = "images\\light\\4.jpg";
+	public static final String d5 = "images\\light\\5.jpg";
+	public static final String dd = "images\\light\\r.jpg";
+	//是否熄火图标
+	public static final String xhg = "images\\light\\xh_off.jpg";
+	public static final String xhk = "images\\light\\xh_on.jpg";
+	
+	
 	public static final String aqdbd = "images\\light\\安全带拔掉.jpg";
 	public static final String aqdcr = "images\\light\\安全带插入.jpg";
 
@@ -58,12 +76,71 @@ public class SignalIcon {
 	public static final String edit = "images\\icons\\btn_sub_edit.png";
 	public static final String edit_touch = "images\\icons\\btn_sub_edit_touch.png";
 	
+	public ImageIcon gpsgIcon;
+	public ImageIcon gpskIcon;
+	
+	public ImageIcon wlgIcon;
+	public ImageIcon wlkIcon;
+	//档位图标
+	public ImageIcon dkIcon;
+	public ImageIcon d1Icon;
+	public ImageIcon d2Icon;
+	public ImageIcon d3Icon;
+	public ImageIcon d4Icon;
+	public ImageIcon d5Icon;
+	public ImageIcon ddIcon;
+	//是否熄火图标
+	public ImageIcon xhgIcon;
+	public ImageIcon xhkIcon;
+	
+	
 	private ImageIcon aqdbdIcon;
 	private ImageIcon aqdcrIcon;
 	private ImageIcon fscIcon;
 	private ImageIcon fssIcon;
 	
 	private ImageIcon hldgIcon;
+	
+	
+	public ImageIcon getGpsgIcon() {
+		return gpsgIcon;
+	}
+	public ImageIcon getGpskIcon() {
+		return gpskIcon;
+	}
+	public ImageIcon getWlgIcon() {
+		return wlgIcon;
+	}
+	public ImageIcon getWlkIcon() {
+		return wlkIcon;
+	}
+	public ImageIcon getDkIcon() {
+		return dkIcon;
+	}
+	public ImageIcon getD1Icon() {
+		return d1Icon;
+	}
+	public ImageIcon getD2Icon() {
+		return d2Icon;
+	}
+	public ImageIcon getD3Icon() {
+		return d3Icon;
+	}
+	public ImageIcon getD4Icon() {
+		return d4Icon;
+	}
+	public ImageIcon getD5Icon() {
+		return d5Icon;
+	}
+	public ImageIcon getDdIcon() {
+		return ddIcon;
+	}
+	public ImageIcon getXhgIcon() {
+		return xhgIcon;
+	}
+	public ImageIcon getXhkIcon() {
+		return xhkIcon;
+	}
 	private ImageIcon hldkIcon;
 	
 	private ImageIcon jscIcon;
@@ -120,6 +197,26 @@ public class SignalIcon {
 		del_touchIcon = new ImageIcon(del_touch);
 		editIcon = new ImageIcon(edit);
 		edit_touchIcon = new ImageIcon(edit_touch);
+		
+		
+		
+		
+		gpsgIcon = new ImageIcon(gpsg);
+		gpskIcon = new ImageIcon(gpsk);
+		
+		wlgIcon = new ImageIcon(wlg);
+		wlkIcon = new ImageIcon(wlk);
+		//档位图标
+		dkIcon = new ImageIcon(dk);
+		d1Icon = new ImageIcon(d1);
+		d2Icon = new ImageIcon(d2);
+		d3Icon = new ImageIcon(d3);
+		d4Icon = new ImageIcon(d4);
+		d5Icon = new ImageIcon(d5);
+		ddIcon = new ImageIcon(dd);
+		//是否熄火图标
+		xhgIcon = new ImageIcon(xhg);
+		xhkIcon = new ImageIcon(xhk);
 		
 		
 		

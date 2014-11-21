@@ -14,6 +14,7 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -76,7 +77,6 @@ public class MainWindow  extends JFrame{
 		this.init();
 	}
 	public void init(){
-		//添加背景图片 
 		JPanel panel =(JPanel) this.getContentPane();
 		JPanel contentPane = new JPanel(){
 			public void paintComponent(Graphics g) {	
@@ -98,27 +98,28 @@ public class MainWindow  extends JFrame{
 		
 		JPanel topPanel = new JPanel();
 		topPanel.setOpaque(false);
-		topPanel.setPreferredSize(new Dimension(WIDTH, 140));
+		topPanel.setPreferredSize(new Dimension(WIDTH, 160));
 		JPanel ItPanel = new JPanel();
 		ItPanel.setOpaque(false);
-		ItPanel.setPreferredSize(new Dimension(WIDTH, 120));
+		ItPanel.setPreferredSize(new Dimension(WIDTH, 90));
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setOpaque(false);
-		buttonPanel.setPreferredSize(new Dimension(WIDTH, 200));
+		buttonPanel.setPreferredSize(new Dimension(WIDTH, 150));
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setOpaque(false);
-		bottomPanel.setPreferredSize(new Dimension(WIDTH, 50));
+		bottomPanel.setPreferredSize(new Dimension(WIDTH, 80));
 		
 		JPanel copyRightPanel = new JPanel();
 		copyRightPanel.setOpaque(false);
-		copyRightPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT - 510));
+		copyRightPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT - 480));
+		
 		contentPane.add(topPanel);
 		contentPane.add(ItPanel);
 		contentPane.add(buttonPanel);
 		contentPane.add(bottomPanel);
 		contentPane.add(copyRightPanel);
 		//分割topPanel
-		topPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
+		topPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 60));
 		JLabel titleIcon = new JLabel(allImage.getTitleIcon());
 //		{
 //		protected void paintComponent(Graphics g) {
@@ -130,17 +131,18 @@ public class MainWindow  extends JFrame{
 		topPanel.add(titleIcon);
 		
 		//分割ItPanel
-		ItPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 50));
-		JLabel examCharacter = new JLabel(){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				g.drawImage(new ImageIcon("images\\icons\\lt.png").getImage(), 0, 0, this.getWidth(), this.getHeight(), this);
-			}
-		};
-		examCharacter.setPreferredSize(new Dimension(WIDTH* 2/ 3, 50));
+		ItPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 15));
+		JLabel examCharacter = new JLabel(new ImageIcon("images\\main\\It.png"));
+//		{
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			protected void paintComponent(Graphics g) {
+//				super.paintComponent(g);
+//				g.drawImage(new ImageIcon("images\\icons\\lt.png").getImage(), 0, 0, this.getWidth(), this.getHeight(), this);
+//			}
+//		};
+		examCharacter.setPreferredSize(new Dimension(WIDTH, 50));
 		ItPanel.add(examCharacter);
 		
 		//分割buttonPanel
@@ -158,15 +160,13 @@ public class MainWindow  extends JFrame{
 		addComponent.add(exit, constraints, 4, 1, 4, 1);
 		
 		//分割bottomPanel
-		bottomPanel.setLayout(new GridLayout(1, 2, 0, 0));
-		compLabel = new JLabel("    主机：未连接", JLabel.RIGHT);
-		compLabel.setFont(new Font("华文中宋", 1, 18));
-		compLabel.setForeground(Color.RED);
+		bottomPanel.setLayout(new GridLayout(1, 2, 30, 0));
+		bottomPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+		compLabel = new JLabel(new ImageIcon("images\\main\\net_off.png"), JLabel.RIGHT);
+		
 		bottomPanel.add(compLabel);
 
-		GpsPanel = new JLabel("    GPS：未连接", JLabel.LEFT);
-		GpsPanel.setForeground(Color.RED);
-		GpsPanel.setFont(new Font("华文中宋", 1, 18));
+		GpsPanel = new JLabel(new ImageIcon("images\\main\\gps_off.png"), JLabel.LEFT);
 		bottomPanel.add(GpsPanel);
 
 		/**************************************************************************/
@@ -179,7 +179,7 @@ public class MainWindow  extends JFrame{
 		          {
 		            public void run() {
 		            	new SettingFrm("系统设置");
-		            	MainWindow.this.dispose();		       
+		     //       	MainWindow.this.dispose();		       
 		            }
 		          });
 			}
@@ -188,7 +188,6 @@ public class MainWindow  extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				LineSelectDialog dialog = new LineSelectDialog();
 				dialog.setVisible(true);
-				//MainWindow.this.dispose();
 			}
 
 		});
@@ -199,7 +198,6 @@ public class MainWindow  extends JFrame{
 		          {
 		            public void run() {
 		              new RoutineTrainingFrm("日常训练");
-		              MainWindow.this.dispose();
 		            }
 		          });
 			}
@@ -211,7 +209,7 @@ public class MainWindow  extends JFrame{
 		          {
 		            public void run() {
 		              new LightTrainFrm("日常训练");
-		              MainWindow.this.dispose();
+		  //            MainWindow.this.dispose();
 		            }
 		          });
 			}
@@ -224,10 +222,8 @@ public class MainWindow  extends JFrame{
 			}
 		});
 		this.uiThread.start();
-		if(!this.signalReader.isAlive())
-			this.signalReader.start();
-		if(!this.gpsThread.isAlive())
-			this.gpsThread.start();
+		this.signalReader.start();
+		this.gpsThread.start();
 		this.setVisible(true);	
 		
 	}
@@ -248,20 +244,15 @@ public class MainWindow  extends JFrame{
 		private void refreshState() {
 			try {
 				if (MainWindow.this.judge.gps) {
-					MainWindow.this.GpsPanel.setText("    GPS：已连接");
-					
-					MainWindow.this.GpsPanel.setForeground(Color.GREEN);
+					MainWindow.this.GpsPanel.setIcon(new ImageIcon("images\\main\\gps_on.png"));;
 				} else {
-					MainWindow.this.GpsPanel.setText("    GPS：未连接");
-					MainWindow.this.GpsPanel.setForeground(Color.RED);
+					MainWindow.this.GpsPanel.setIcon(new ImageIcon("images\\main\\gps_off.png"));;
 				}
 
 				if (MainWindow.this.judge.tcp) {
-					MainWindow.this.compLabel.setText("    主机：已连接");
-					MainWindow.this.compLabel.setForeground(Color.GREEN);
+					MainWindow.this.compLabel.setIcon(new ImageIcon("images\\main\\net_on.png"));
 				} else {
-					MainWindow.this.compLabel.setText("    主机：未连接");
-					MainWindow.this.compLabel.setForeground(Color.RED);
+					MainWindow.this.compLabel.setIcon(new ImageIcon("images\\main\\net_off.png"));
 				}
 
 	      } catch (Exception ex) {
@@ -281,7 +272,7 @@ public class MainWindow  extends JFrame{
 	  }
 	//主程序入口
 	public static void main(String[] args) {
-		Font font = new Font("华文中宋", Font.BOLD, 15);
+		Font font = new Font("黑体", Font.BOLD, 15);
 		java.util.Enumeration<Object> keys = UIManager.getDefaults().keys();
 		while (keys.hasMoreElements()) {
 			Object key = keys.nextElement();

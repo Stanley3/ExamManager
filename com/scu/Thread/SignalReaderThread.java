@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
 
+import com.scu.GlobelControl.ConfigManager;
 import com.scu.Signal.JudgeSignal;
 import com.scu.Signal.Signal;
 
@@ -47,16 +48,16 @@ public class SignalReaderThread extends Thread {
 				this.signalReader.throwError();
 			}
 			if (count > 0) {
-//				 try {
-//				 signalCode = new String(buffer, 0, count, "UTF-8");
-//				 } catch (UnsupportedEncodingException e) {
-//				 System.err.println("指定的编码格式错误");
-//				 this.signalReader.throwError();
-//				 return ;
-//				 }
-				for (int i = 0; i < count; ++i) {
-					signalCode += convertToString(buffer[i]);
-				}
+				 try {
+				 signalCode = new String(buffer, 0, count, "UTF-8");
+				 } catch (UnsupportedEncodingException e) {
+				 System.err.println("指定的编码格式错误");
+				 this.signalReader.throwError();
+				 return ;
+				 }
+//				for (int i = 0; i < count; ++i) {
+//					signalCode += convertToString(buffer[i]);
+//				}
 				String tmpSignal = signalCode;
 				judgeCode(tmpSignal);
 				signalCode = "";
@@ -81,9 +82,10 @@ public class SignalReaderThread extends Thread {
 		code = code.replace(" ", "");
 		System.out.println("code= " + code);
 		if (code.equalsIgnoreCase(Signal.BEAMLIGHTOFF))
-			js.lamp_near = false;
+			
+			js.lamp_near = ConfigManager.signalSource.isLamp_near_reversal() ? true : false;
 		else if (code.equalsIgnoreCase(Signal.BEAMLIGNTON))
-			js.lamp_near = true;
+			js.lamp_near = ConfigManager.signalSource.isLamp_near_reversal() ? false : true;
 		else if (code.equalsIgnoreCase(Signal.FIRSTGEAR))
 			js.gear = 1;
 		else if (code.equalsIgnoreCase(Signal.SECONDGEAR))
@@ -99,13 +101,13 @@ public class SignalReaderThread extends Thread {
 		else if (code.equalsIgnoreCase(Signal.NOGEAR))
 			js.gear = 0;
 		else if (code.equalsIgnoreCase(Signal.FOGLAMPOFF))
-			js.lamp_fog = false;
+			js.lamp_fog = ConfigManager.signalSource.isLamp_fog_reversal() ? true : false;
 		else if (code.equalsIgnoreCase(Signal.FOGLAMPON))
-			js.lamp_fog = true;
+			js.lamp_fog = ConfigManager.signalSource.isLamp_fog_reversal() ? false : true;
 		else if (code.equalsIgnoreCase(Signal.HIGHBEAMOFF))
-			js.lamp_highbeam = false;
+			js.lamp_highbeam = ConfigManager.signalSource.isLamp_near_reversal() ? true : false;
 		else if (code.equalsIgnoreCase(Signal.HIGHBEAMON))
-			js.lamp_highbeam = true;
+			js.lamp_highbeam = ConfigManager.signalSource.isLamp_near_reversal() ? false : true;
 		else if (code.equalsIgnoreCase(Signal.LEFTLAMP))
 			lampPlusThread.status = 1;
 		else if (code.equalsIgnoreCase(Signal.RIGHTLAMP))
@@ -114,13 +116,13 @@ public class SignalReaderThread extends Thread {
 //			js.lamp_urgent = true;
 			lampPlusThread.status = 3;
 		else if (code.equalsIgnoreCase(Signal.FOOTBRAKEOFF))
-			js.signal_footbrake = false;
+			js.signal_footbrake = ConfigManager.signalSource.isFootBreak_reversal() ? true : false;
 		else if (code.equalsIgnoreCase(Signal.FOOTBRAKEON))
-			js.signal_footbrake = true;
+			js.signal_footbrake = ConfigManager.signalSource.isFootBreak_reversal() ? false : true;
 		else if (code.equalsIgnoreCase(Signal.HANDBRAKEOFF))
-			js.signal_handbrake = false;
+			js.signal_handbrake = ConfigManager.signalSource.isHandBreak_reversal() ? true : false;
 		else if (code.equalsIgnoreCase(Signal.HANDBRAKEON))
-			js.signal_handbrake = true;
+			js.signal_handbrake = ConfigManager.signalSource.isHandBreak_reversal() ? false : true;
 		else if (code.equalsIgnoreCase(Signal.DEPUTYFOOTBRAKE))
 			js.signal_deputybrake = true;
 		else if (code.equalsIgnoreCase(Signal.FRONTBUMPER))
@@ -134,6 +136,14 @@ public class SignalReaderThread extends Thread {
 		else if (code.equalsIgnoreCase(Signal.SEATBELT))
 //			js.signal_seatbelt = false;
 			lampPlusThread.seltStatus = 1;
+		else if(code.substring(0, 5).trim().equalsIgnoreCase("speed"))
+			js.gpsspeed = Integer.parseInt(code.substring(6));
+		else if(code.substring(0, 5).trim().equalsIgnoreCase("angle"))
+			js.gpsangle = Integer.parseInt(code.substring(6));
+		else if(code.substring(0, 3).trim().equalsIgnoreCase("lat"))
+			js.lat  = Double.parseDouble(code.substring(4));
+		else if(code.substring(0, 3).trim().equalsIgnoreCase("lon"))
+			js.lon = Double.parseDouble(code.substring(4));
 		else {
 			System.err.println("错误的代码：" + code);
 			writeCode(code);

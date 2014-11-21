@@ -35,150 +35,155 @@ private static String[] HexCode = {
     * @param oldlon
     * @return 根据两个点的经纬度值计算的这两点形成的直线按顺时针和正北方向的角度
     */
-   public static double getAngleByPoint(double newlat, double newlon, double oldlat, double oldlon) {
-     double angle = 0.0D;
- 
-     double dx = newlon - oldlon;
-     double dy = newlat - oldlat;
- 
-     if (Math.abs(dy) < 1.0E-010D)
-     {
-       if (dx > 0.0D)
-         angle = Math.PI / 2.0 ;
-       else
-         angle = Math.PI * 3.0 / 2.0;
-     }
-     else if (dy > 1.0E-010D)
-     {
-       if (dx > 1.0E-010D)
-        angle = Math.PI / 2.0 - Math.atan2(Math.abs(dy), Math.abs(dx));
-       else if (dx < 1.0E-010D) {
-         angle = Math.PI * 3.0 / 2.0 + Math.atan2(Math.abs(dy), Math.abs(dx));
-       }
- 
-     }
-     else if (dx > 1.0E-010D)
-       angle = Math.PI / 2.0 + Math.atan2(Math.abs(dy), Math.abs(dx));
-     else if (Math.abs(dx) < 1.0E-010D)
-       angle = Math.PI;
-     else if (dx < 1.0E-010D) {
-       angle = Math.PI * 3.0 / 2.0 - Math.atan2(Math.abs(dy), Math.abs(dx));
-     }
-     return angle * 180.0D / Math.PI;
-   }
- 
-   public static double getSinBC(double angle, double AC) {
-     return AC * Math.sin(Math.abs(angle * Math.PI / 180.0D)); } 
-
+//   public static double getAngleByPoint(double newlat, double newlon, double oldlat, double oldlon) {
+//     double angle = 0.0D;
+// 
+//     double dx = newlon - oldlon;
+//     double dy = newlat - oldlat;
+// 
+//     if (Math.abs(dy) < 1.0E-010D)
+//     {
+//       if (dx > 0.0D)
+//         angle = Math.PI / 2.0 ;
+//       else
+//         angle = Math.PI * 3.0 / 2.0;
+//     }
+//     else if (dy > 1.0E-010D)
+//     {
+//       if (dx > 1.0E-010D)
+//        angle = Math.PI / 2.0 - Math.atan2(Math.abs(dy), Math.abs(dx));
+//       else if (dx < 1.0E-010D) {
+//         angle = Math.PI * 3.0 / 2.0 + Math.atan2(Math.abs(dy), Math.abs(dx));
+//       }
+// 
+//     }
+//     else if (dx > 1.0E-010D)
+//       angle = Math.PI / 2.0 + Math.atan2(Math.abs(dy), Math.abs(dx));
+//     else if (Math.abs(dx) < 1.0E-010D)
+//       angle = Math.PI;
+//     else if (dx < 1.0E-010D) {
+//       angle = Math.PI * 3.0 / 2.0 - Math.atan2(Math.abs(dy), Math.abs(dx));
+//     }
+//     return angle * 180.0D / Math.PI;
+//   }
+// 
+//   public static double getSinBC(double angle, double AC) {
+//     return AC * Math.sin(Math.abs(angle * Math.PI / 180.0D)); } 
+//
    public static int getAngleByGpsAngle(int newAngle, int oldAngle) {
-	   return 0;
+	   if(oldAngle - newAngle > 180)
+		   return 360 - (oldAngle - newAngle);
+	   else if(oldAngle - newAngle < -180)
+		   return 360 + oldAngle - newAngle;
+	   else
+		  return  Math.abs(oldAngle - newAngle);
    }
-   public static double getSpeedByPulse(int pulse, int radio, int timespan) { double speed = 0.0D;
-    try {
-       speed = pulse * 1000 * 3600 / radio / timespan;
-    }
-     catch (Exception localException) {
-     }
-     return Double.parseDouble(df.format(speed)); }
- 
-   public static double getDistinceByPulse(int pulse, int radio)
-   {
-     double distince = 0.0D;
-     try {
-       distince = pulse * 1000 / radio;
-     }
-     catch (Exception localException)
-     {
-     }
- 
-     return Double.parseDouble(df.format(distince));
-   }
+//   public static double getSpeedByPulse(int pulse, int radio, int timespan) { double speed = 0.0D;
+//    try {
+//       speed = pulse * 1000 * 3600 / radio / timespan;
+//    }
+//     catch (Exception localException) {
+//     }
+//     return Double.parseDouble(df.format(speed)); }
+// 
+//   public static double getDistinceByPulse(int pulse, int radio)
+//   {
+//     double distince = 0.0D;
+//     try {
+//       distince = pulse * 1000 / radio;
+//     }
+//     catch (Exception localException)
+//     {
+//     }
+// 
+//     return Double.parseDouble(df.format(distince));
+//   }
    /**
     * 根据速度和时间计算行驶的距离
-    * @param V 单位米每秒(m/s)
-    * @param time 单位毫秒(s)
+    * @param V 单位千米每小时(km/h)
+    * @param time 单位毫秒(ms)
     * @return 该时间段内行驶的距离  单位米(m)
     */
    public static double getDistinceByOBDV(double V, int time) {
      double distince = 0.0D;
      try {
-       distince = V * time / 1000.0D;
+       distince = V * time / 3600.0D;
      }
      catch (Exception localException) {
      }
     return distince;
    }
  
-   public static double getAngleByAcc(double[][] acc) {
-     double angle = 0.0D;
-    if ((acc == null) || (acc.length == 0))
-       return angle;
-     for (int i = 0; i < acc.length; i++) {
-       angle += Math.atan2(acc[i][1], acc[i][2]) * 57.295779513082323D;
-     }
-     return angle;
-   }
- 
-   public static String byteToHexString(byte b)
-   {
-     int n = b;
-     if (n < 0)
-       n += 256;
-     int d1 = n / 16;
-     int d2 = n % 16;
-     return HexCode[d1] + HexCode[d2];
-   }
- 
-   public static String byteArrayToHexString(byte[] b) {
-     String result = "";
-     for (int i = 0; i < b.length; i++)
-       result = result + byteToHexString(b[i]);
-     return result;
-   }
-   /**
-    * 
-    * @return  计算轮胎的周长
-    */
-   public static double tyreCircumference() {
-     return 0.0;
-   }
-   
-   /**
-    * 计算档位
-    * @param n
-    * @param V
-    * @return 档位
-    */
-//   public static int getGear(double n, double V)
+//   public static double getAngleByAcc(double[][] acc) {
+//     double angle = 0.0D;
+//    if ((acc == null) || (acc.length == 0))
+//       return angle;
+//     for (int i = 0; i < acc.length; i++) {
+//       angle += Math.atan2(acc[i][1], acc[i][2]) * 57.295779513082323D;
+//     }
+//     return angle;
+//   }
+// 
+//   public static String byteToHexString(byte b)
 //   {
-//     int iGear = 0;
-//     return iGear;
+//     int n = b;
+//     if (n < 0)
+//       n += 256;
+//     int d1 = n / 16;
+//     int d2 = n % 16;
+//     return HexCode[d1] + HexCode[d2];
 //   }
-   /**
-    * 计算某档位的速度
-    * @param gear
-    * @param V
-    * @return 档位的速度
-    */
-//   public static int getGearSpeed(int gear, double V) {
-//     int iGear = 0;
-//     return iGear;
+// 
+//   public static String byteArrayToHexString(byte[] b) {
+//     String result = "";
+//     for (int i = 0; i < b.length; i++)
+//       result = result + byteToHexString(b[i]);
+//     return result;
 //   }
-   /**
-    * 计算方向盘的角度
-    * @param len
-    * @param diameter 方向盘的直径
-    * @return 方向盘的角度
-    */
-   public static double getWheelAngleByLen(double len, int diameter) {
-     double angle = 0.0D;
-     try {
-      angle = 360.0D * len / (Math.PI * diameter);
-     } catch (Exception ex) {
-       angle = 0.0D;
-     }
-     return angle;
-   }
+//   /**
+//    * 
+//    * @return  计算轮胎的周长
+//    */
+//   public static double tyreCircumference() {
+//     return 0.0;
+//   }
+//   
+//   /**
+//    * 计算档位
+//    * @param n
+//    * @param V
+//    * @return 档位
+//    */
+////   public static int getGear(double n, double V)
+////   {
+////     int iGear = 0;
+////     return iGear;
+////   }
+//   /**
+//    * 计算某档位的速度
+//    * @param gear
+//    * @param V
+//    * @return 档位的速度
+//    */
+////   public static int getGearSpeed(int gear, double V) {
+////     int iGear = 0;
+////     return iGear;
+////   }
+//   /**
+//    * 计算方向盘的角度
+//    * @param len
+//    * @param diameter 方向盘的直径
+//    * @return 方向盘的角度
+//    */
+//   public static double getWheelAngleByLen(double len, int diameter) {
+//     double angle = 0.0D;
+//     try {
+//      angle = 360.0D * len / (Math.PI * diameter);
+//     } catch (Exception ex) {
+//       angle = 0.0D;
+//     }
+//     return angle;
+//   }
    /**
     * 未知的方法
     * @param cls 类名

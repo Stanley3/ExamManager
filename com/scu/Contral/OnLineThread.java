@@ -10,6 +10,9 @@ import com.scu.Media.MediaPlay;
 import com.scu.Model.ExamWindow;
 
 public class OnLineThread extends ModuleThread {
+	double startAngle=0.0D;
+	double endAngle;
+	double angle;
 	private boolean online_40301 = false;
 	private boolean online_30116 = false;
 	private boolean turn = false;
@@ -30,7 +33,7 @@ public class OnLineThread extends ModuleThread {
 		try {
 			MediaPlay.getInstance().play("zxxs.wav");
 			Thread curt = Thread.currentThread();
-			// Log.debug("直线行驶线程被唤�?);
+			// Log.debug("直线行驶线程被唤�?);
 			this.isPause = false;
 			this.startTime = System.currentTimeMillis();
 			while (this.runFlag) {
@@ -60,10 +63,17 @@ public class OnLineThread extends ModuleThread {
 	public void execute() {
 		JudgeSignal carSignal = JudgeSignal.getInstance();
 		if((int)carSignal.gpsspeed>0){
+			if(startAngle==0.0D)
+			{
+				startAngle=carSignal.gpsangle;
+			}
+			endAngle=carSignal.gpsangle;
+			/* 汽车角度 */
+			 angle =endAngle-startAngle;
 			this.curRange += Tools.getDistinceByOBDV(carSignal.gpsspeed, 200);
-			double angle = carSignal.wheelangle;
+			//double angle = carSignal.wheelangle;
 			if ((this.curRange > 10.0D) && (// 车�?
-					(carSignal.gpsspeed < ConfigManager.linerDriving.getMaxSpeed()) || (carSignal.gpsspeed > ConfigManager.linerDriving
+					(carSignal.gpsspeed > ConfigManager.linerDriving.getMaxSpeed()) || (carSignal.gpsspeed <ConfigManager.linerDriving
 							.getMinSpeed()))) {
 				this.csbd = true;
 			}

@@ -4,11 +4,11 @@ import com.scu.Config.*;
 /**
  * 配置管理类
  * @author 孙晓雨 2014.10.9
- *
  */
 
 public class ConfigManager {
 	//初始化各种配置
+	public static SignalSourceConfig signalSource = SignalSourceConfig.getInstance();
 	public static AutoJudgeConfig autoJadge = AutoJudgeConfig.getInstance();
 	public static CommonConfig commonConfig = CommonConfig.getInstance();
 	public static AboardPrepareConfig abordPrepare = AboardPrepareConfig.getInstance();

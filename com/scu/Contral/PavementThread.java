@@ -12,6 +12,7 @@ public class PavementThread extends ModuleThread {
 	public static double RANGETIGGER = ConfigManager.footWayLiner
 			.getTriggerDistance();
 	public boolean isPlay = false;
+	private boolean drive_41001=false;
 
 	public PavementThread(ExamWindow window, int moduleFlag) {
 		super(window, moduleFlag);
@@ -55,16 +56,21 @@ public class PavementThread extends ModuleThread {
 		this.curRange += Tools.getDistinceByOBDV(
 				JudgeSignal.getInstance().gpsspeed, 200);
 		this.curspeed = JudgeSignal.getInstance().gpsspeed;
+		if (this.curspeed > ConfigManager.footWayLiner.getMaxSpeed()&&!this.drive_41001) {
+			this.drive_41001=true;
+			sendMessage("41001", 6);
+		}// 是否�?��刹车
 		this.breakFlag |= JudgeSignal.getInstance().signal_footbrake;
 	}
 
 	public void judge() {
 		if (!ConfigManager.footWayLiner.isOpen())
 			return;
-		if (this.curspeed > ConfigManager.footWayLiner.getMaxSpeed()) {
-			sendMessage("41001", 6);
-		}// 是否�?��刹车
-		else if ((ConfigManager.autoJadge.isNeedBrake()) && (!this.breakFlag))
+//		if (this.curspeed > ConfigManager.footWayLiner.getMaxSpeed()) {
+//			sendMessage("41001", 6);
+//		}// 是否�?��刹车
+		/*修改*/
+		if ((ConfigManager.autoJadge.isNeedBrake()) && (!this.breakFlag))
 			sendMessage("41001", 6);
 	}
 }
