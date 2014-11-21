@@ -23,7 +23,7 @@ public class PrepareThread extends ModuleThread {
 		this.iTimeOut = ConfigManager.abordPrepare.getEndTime();
 		RANGETIGGER = ConfigManager.abordPrepare.getTriggerDistance();
 		this.seq = ConfigManager.abordPrepare.getAround();
-		this.setName("prepareThread" + this.activeCount());
+	//	this.setName("prepareThread" + this.activeCount());
 	}
 
 	public synchronized void run() {

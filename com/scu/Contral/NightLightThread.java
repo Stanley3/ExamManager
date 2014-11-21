@@ -63,7 +63,7 @@ public class NightLightThread extends ModuleThread implements
 		DBHelper db = new DBHelper();
 		try {
 			db.conn();
-			System.out.println(this.examId+"");
+	//		System.out.println(this.examId+"");
 			int cnt = db.QueryCnt("lamps_point", "lamp_id=" + this.examId);
 			if (cnt > 0) {
 				this.curTest = new int[cnt];
@@ -99,7 +99,7 @@ public class NightLightThread extends ModuleThread implements
 			for (int i = 0; i < this.curTest.length; i++) {
 				if (!this.runFlag)
 					break;
-				System.out.println(this.runFlag);
+		//		System.out.println(this.runFlag);
 				try {
 					this.curCarSignal = (this.lastCarSignal = null);
 					this.curId = this.curTest[i];

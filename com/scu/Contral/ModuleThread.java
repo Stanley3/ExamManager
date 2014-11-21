@@ -7,9 +7,9 @@ import java.sql.ResultSet;
 public abstract class ModuleThread extends Thread {
 	public boolean runFlag = true;
 	public boolean isBreakFlag = false;
-	/* �?��时间 */
+	/* �?��时间 */
 	public long startTime = System.currentTimeMillis();
-	/* 结束方式 1 代表按时�?2代表按距�?*/
+	/* 结束方式 1 代表按时�?2代表按距�?*/
 	public int jsfs = 1;
 	/* 时间结束 */
 	public long iTimeOut = 0;
@@ -23,10 +23,10 @@ public abstract class ModuleThread extends Thread {
 	public static int EXAMFLAG = 1;
 	/* 训练模式 */
 	public static int TRAINFLAG = 2;
-	/* 声明窗体的父�?*/
+	/* 声明窗体的父�?*/
 	public ExamWindow window;
 
-	/* 构�?函数 */
+	/* 构�?函数 */
 	public ModuleThread(ExamWindow window, int moduleFlag) {
 		this.window = window;
 		this.moduleFlag = moduleFlag;
@@ -60,7 +60,7 @@ public abstract class ModuleThread extends Thread {
 	}
 
 	/**
-	 * 判断超出的方�?
+	 * 判断超出的方�?
 	 * 
 	 * @return
 	 */
@@ -72,7 +72,7 @@ public abstract class ModuleThread extends Thread {
 	}
 
 	/**
-	 * 发�?错误信息
+	 * 发�?错误信息
 	 * 
 	 * @param code
 	 *            错误种类
@@ -80,7 +80,7 @@ public abstract class ModuleThread extends Thread {
 	 *            当前错误属于16个模块的那个模块
 	 */
 	public void sendMessage(String code, int type) {
-		// 自动评判是否�?��
+		// 自动评判是否�?��
 		if (!ConfigManager.autoJadge.isOpenAutoJudge())
 			return;
 		Message msg = new Message();

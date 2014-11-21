@@ -123,7 +123,7 @@ public class JudgeSignal
     */
    public double gpsangle = 0;
    /**
-    * 车辆的速度值，单位km/h(km/h)
+    * 车辆的速度值，单位米每秒(m/s)
     */
    public double gpsspeed = 0.0D;
    /**

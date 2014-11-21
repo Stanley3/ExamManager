@@ -536,10 +536,10 @@ public class LightTrainFrm extends ExamWindow {
 				}
 				
 				if(carSignal.signal_off){
-					xh.setIcon(signalIcon.getXhgIcon());
+					xh.setIcon(signalIcon.getXhkIcon());
 				}else
 				{
-					xh.setIcon(signalIcon.getXhkIcon());
+					xh.setIcon(signalIcon.getXhgIcon());
 				}
 				
 				if(carSignal.signal_seatbelt){

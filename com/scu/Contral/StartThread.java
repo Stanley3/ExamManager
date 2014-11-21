@@ -22,7 +22,7 @@ public class StartThread extends ModuleThread {
 	/* 起步、转向�?变更车道、超车�?停车前，�?��向灯少于3s即转�?*/
 	private boolean start_30206 = false;
 	/* 不按考试员指令驾�?*/
-	private boolean start_40200 = true;
+	private boolean start_30103 = true;
 	/* 起步时车辆发生闯�?置为true暂不判断) */
 	private boolean start_40209 = true;
 	/* 驾驶姿势不正�?*/
@@ -44,8 +44,6 @@ public class StartThread extends ModuleThread {
 	private double car_speed = 0.0D;
 	private boolean is2Gear = false;
 	private boolean is3Gear = false;
-	private double startAngle=0;
-	private double endAngle=0;
 	/* 手刹 */
 	private boolean handbrake = true;
 	/* 手刹持续时间 */
@@ -55,8 +53,6 @@ public class StartThread extends ModuleThread {
 	private int sate=0;
 	private int nextSate=1;
 	private boolean order=true;
-	private long handlosstime=0L;
-	private boolean start_40201=false;
 	
 	public StartThread(ExamWindow window, int moduleFlag) {
 		super(window, moduleFlag);
@@ -86,7 +82,7 @@ public class StartThread extends ModuleThread {
 		}
 		this.window.remove(this);
 		if (this.jsfs == 2)
-			this.start_40200 = false;
+			this.start_30103 = false;
 		if (!this.isBreakFlag) {
 			judge();
 			sendEndMessage(2);
@@ -99,21 +95,6 @@ public class StartThread extends ModuleThread {
 		JudgeSignal carSignal = JudgeSignal.getInstance();
 		this.curRange += Tools.getDistinceByOBDV(carSignal.gpsspeed, 200);
 		this.car_speed = carSignal.gpsspeed;
-		if(this.startAngle==0)
-		{
-			this.startAngle=carSignal.gpsangle;
-		}
-		this.endAngle = (int) carSignal.gpsangle;
-		double angle = this.endAngle - this.startAngle;
-		if (angle > 180)
-			angle -= 360;
-		else if (angle < -180)
-			angle += 360;
-		//this.turnAngle = angle;
-		if(angle>0)
-		{
-			this.turnleft=true;
-		}
 		/*---------------------------修改-------------------------------------*/
 		switch(this.nextSate)
 		{
@@ -147,7 +128,7 @@ public class StartThread extends ModuleThread {
 					this.nextSate=6;
 				break;
 			case 5:
-				if(!carSignal.signal_handbrake)
+				if(carSignal.signal_handbrake)
 					this.sate=5;
 				if(this.sate!=this.nextSate)
 					this.nextSate=6;
@@ -161,40 +142,21 @@ public class StartThread extends ModuleThread {
 		/**
 		 * 判断手刹是否正确
 		 */
-		//松手刹后没有起步的时间
-		if (!carSignal.signal_handbrake)
-			this.handlosstime += 200;
-		else {
-			this.handlosstime = 0L;
-		}
-		//判断松手刹后5S内车辆的速度
-		if(!this.start_40201&&!carSignal.signal_handbrake&&this.handlosstime>5000&&carSignal.gpsspeed==0)
-		{
-			this.start_40201=true;
-			sendMessage("40201", 2);
-		}
-		if(carSignal.gpsspeed>0){
 		if ((this.handbrake) && (!carSignal.signal_handbrake)) {
 			this.handbrake = false;
 		}
-		if (carSignal.signal_handbrake)
+		if (!carSignal.signal_handbrake)
 			this.handbraketime += 200;
 		else {
 			this.handbraketime = 0L;
-		}//判断起步后没有松手刹
+		}
 		if ((this.handbraketime > ConfigManager.startCar.getMaxTime() )
-				&& (this.start_40200)) {
-			this.start_40200 = false;
+				&& (this.start_30103)) {
+			this.start_30103 = false;
 			this.runFlag = false;
-			sendMessage("40200", 2);
+			sendMessage("30103", 2);
 		}
-		else if(this.handbraketime>0&& (this.start_40206))
-		{
-			this.start_40206 = false;
-			this.runFlag = false;
-			sendMessage("40206", 2);
-		}
-		}
+
 		if (this.car_speed > 0.0D) {
 			if (ConfigManager.startCar.isOpen()) {//判断档位
 				if ((carSignal.gear != 1) && (!this.start_30204)) {
@@ -214,7 +176,7 @@ public class StartThread extends ModuleThread {
 		} else if (this.turnLightTime < ConfigManager.commonConfig
 				.getTurnLightWaitTime()) {
 			if (carSignal.lamp_left) {
-			//	this.turnleft = true;
+				this.turnleft = true;
 				this.turnLightTime += 200;
 				//if(this.turnLightTime>=3)
 				System.out.println("时间"+ this.turnLightTime);
@@ -240,11 +202,11 @@ public class StartThread extends ModuleThread {
 			sendMessage("40202", 2);
 		}
      //不松驻车制动器起步，但能及时纠正
-//		if ((!this.start_40206) && (ConfigManager.startCar.isOpen())
-//				&& (this.car_speed > 0.0D) && (carSignal.signal_handbrake)) {
-//			this.start_40206 = true;
-//			sendMessage("40206", 2);
-//		}
+		if ((!this.start_40206) && (ConfigManager.startCar.isOpen())
+				&& (this.car_speed > 0.0D) && (carSignal.signal_handbrake)) {
+			this.start_40206 = true;
+			sendMessage("40206", 2);
+		}
 		//起步时，加速踏板控制不当，致使发动机转速过高
 		if ((!this.start_40210) && (ConfigManager.startCar.isOpen())
 				&& (carSignal.n >= ConfigManager.addClass.CARPARM_QB_QBFDJZZGG)) {
@@ -259,9 +221,9 @@ public class StartThread extends ModuleThread {
 			sendMessage("40209", 2);
 		}
 		//未按语音指令完成起步
-		if (this.car_speed >= 1.0D) {
+		if (this.car_speed >= 5.0D) {
 			// Log.debug("完成起步判定");
-			this.start_40200 = false;
+			this.start_30103 = false;
 			this.runFlag = false;
 		}
 	}
@@ -269,7 +231,7 @@ public class StartThread extends ModuleThread {
 	public void judge() {
 		if (!ConfigManager.startCar.isOpen())
 			return;
-		if (this.start_40200)
+		if (this.start_30103)
 			sendMessage("30103", 2);
 		if(!order||this.sate!=5)
 		{

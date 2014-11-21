@@ -45,6 +45,7 @@ public class LightEditDialog extends JDialog{
 	    this.examWindow = window;
 	    init();
 	    this.title = "±‡º≠”Ô“ÙÃ‚ø‚";
+	    this.setModal(true);
 	    setAlwaysOnTop(true);
 	    setUndecorated(true);
 	    Dimension d = Toolkit.getDefaultToolkit().getScreenSize();

@@ -46,6 +46,7 @@ public class LightListDialog extends JDialog {
 	public LightListDialog(ExamWindow window) {
 		this.examWindow = window;
 		init();
+		this.setModal(true);
 		this.title = "«Î—°‘Ò”Ô“ÙÃ‚ø‚";
 		setAlwaysOnTop(true);
 		setUndecorated(true);

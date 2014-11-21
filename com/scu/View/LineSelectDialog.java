@@ -39,6 +39,7 @@ public class LineSelectDialog extends JDialog{
 	  public LineSelectDialog()
 	  {
 	    init();
+	    this.setModal(true);
 	    this.title = "ÇëÑ¡Ôñ¿¼ÊÔÏßÂ·";
 	    setAlwaysOnTop(true);
 	    setUndecorated(true);

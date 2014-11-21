@@ -41,6 +41,7 @@ public class LineEidtDialog extends JDialog {
 
 	public LineEidtDialog() {
 		init();
+		this.setModal(true);
 		this.title = "±à¼­Â·Ïß";
 		this.setAlwaysOnTop(true);
 		this.setUndecorated(true);

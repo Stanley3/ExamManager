@@ -231,7 +231,7 @@ public class SystemDetectFrm extends JFrame {
 		lblLon.setFont(font);
 		panel_16.add(lblLon);
 
-		this.lab_gps_lon = new JLabel("100.123456");
+		this.lab_gps_lon = new JLabel("100.12346");
 		this.lab_gps_lon.setHorizontalAlignment(0);
 		this.lab_gps_lon.setForeground(Color.BLACK);
 		this.lab_gps_lon.setFont(font);
@@ -250,7 +250,7 @@ public class SystemDetectFrm extends JFrame {
 		lblLat.setFont(font);
 		panel_17.add(lblLat);
 
-		this.lab_gps_lat = new JLabel("30.123456");
+		this.lab_gps_lat = new JLabel("30.12345");
 		this.lab_gps_lat.setHorizontalAlignment(0);
 		this.lab_gps_lat.setForeground(Color.BLACK);
 		this.lab_gps_lat.setFont(font);
@@ -492,8 +492,8 @@ public class SystemDetectFrm extends JFrame {
 				SystemDetectFrm.this.lab_signal_n.setText(carSignal.n + "RPM");
 				 SystemDetectFrm.this.lab_signal_V.setText((int)(carSignal.gpsspeed)
 				 + "Km/h");
-				SystemDetectFrm.this.lab_gps_lon.setText(new DecimalFormat("#.0000").format(carSignal.lon));
-				SystemDetectFrm.this.lab_gps_lat.setText(new DecimalFormat("#.0000").format(carSignal.lat));
+				SystemDetectFrm.this.lab_gps_lon.setText(new DecimalFormat("#.00000").format(carSignal.lon));
+				SystemDetectFrm.this.lab_gps_lat.setText(new DecimalFormat("#.00000").format(carSignal.lat));
 				SystemDetectFrm.this.lab_gps_angle.setText(carSignal.gpsangle
 						+ "");
 				SystemDetectFrm.this.lab_gps_speed.setText((int)(carSignal.gpsspeed)
