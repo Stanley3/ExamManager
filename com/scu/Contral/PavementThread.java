@@ -26,7 +26,7 @@ public class PavementThread extends ModuleThread {
 		try {
 			Thread curt = Thread.currentThread();
 			if (this.isPlay) {
-				MediaPlay.getInstance().play("rxhdx.wav");
+				MediaPlay.getInstance().play("train_rxhdx.wav");
 			}
 			// Log.debug("人行横道线线程被唤醒");
 			this.isPause = false;
@@ -43,6 +43,7 @@ public class PavementThread extends ModuleThread {
 				}
 		} catch (Exception localException) {
 		}
+		MediaPlay.getInstance().play("finish.wav");
 		this.window.remove(this);
 		if (!this.isBreakFlag) {
 			judge();
@@ -58,7 +59,7 @@ public class PavementThread extends ModuleThread {
 		this.curspeed = JudgeSignal.getInstance().gpsspeed;
 		if (this.curspeed > ConfigManager.footWayLiner.getMaxSpeed()&&!this.drive_41001) {
 			this.drive_41001=true;
-			sendMessage("41001", 6);
+			sendMessage("41004", 6);
 		}// 是否�?��刹车
 		this.breakFlag |= JudgeSignal.getInstance().signal_footbrake;
 	}

@@ -22,7 +22,7 @@ public class SchoolAreaThread extends ModuleThread {
 
 	public synchronized void run() {
 		try {
-			 MediaPlay.getInstance().play("tgxx.wav");
+			 MediaPlay.getInstance().play("train_xxqy.wav");
 			// Thread curr = Thread.currentThread();
 			this.isPause = false;
 			while (this.runFlag)
@@ -38,6 +38,7 @@ public class SchoolAreaThread extends ModuleThread {
 				}
 		} catch (Exception localException) {
 		}
+		MediaPlay.getInstance().play("finish.wav");
 		this.window.remove(this);
 		if (!this.isBreakFlag) {
 			judge();
@@ -65,6 +66,6 @@ public class SchoolAreaThread extends ModuleThread {
 //			sendMessage("41101", 7);
 //		} 
 		if ((ConfigManager.autoJadge.isNeedBrake()) && (!this.breakFlag))
-			sendMessage("41101", 7);
+			sendMessage("41103", 7);
 	}
 }

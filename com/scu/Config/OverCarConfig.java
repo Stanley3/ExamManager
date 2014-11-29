@@ -60,7 +60,7 @@ public class OverCarConfig extends ConfigFather{
 		this.isOpen = isOpen;
 	}
 	public int getTimeOrDistance() {
-		 String res=super.dbHelper.QureyConfig("prepare_jsfs");
+		 String res=super.dbHelper.QureyConfig("overtaken_jsfs");
 			if(Integer.parseInt(res)==1)
 			{
 				return 1;

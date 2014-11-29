@@ -39,7 +39,7 @@ public class LuKouStraightThread extends ModuleThread
 
 	public synchronized void run() {
 		try {
-			MediaPlay.getInstance().play("lkzx.wav");
+			MediaPlay.getInstance().play("train_lkzx.wav");
 			// Log.debug("路口直行线程被唤�?);
 			this.isPause = false;
 			while (this.runFlag) {
@@ -56,6 +56,7 @@ public class LuKouStraightThread extends ModuleThread
 			}
 		} catch (Exception localException) {
 		}
+		MediaPlay.getInstance().play("finish.wav");
 		this.window.remove(this);
 		if (!this.isBreakFlag) {
 			judge();
@@ -107,7 +108,7 @@ public class LuKouStraightThread extends ModuleThread
 		// 判断是否踩刹�?
 		/*修改*/
 		if ((ConfigManager.autoJadge.isNeedBrake()) && (!this.lamp_break)) {
-			sendMessage("40701", 5);
+			sendMessage("40706", 5);
 		}
 		// shifou 夜�?
 //		if (ConfigManager.addClass.isYkms()) {

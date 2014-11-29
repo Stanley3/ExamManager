@@ -38,7 +38,7 @@ public class TurnLeftThread extends ModuleThread {
 
 	public synchronized void run() {
 		try {
-			MediaPlay.getInstance().play("lkzzw.wav");
+			MediaPlay.getInstance().play("train_lkzzw.wav");
 			Thread curt = Thread.currentThread();
 			// Log.debug("路口左转弯线程被唤醒");
 			this.isPause = false;
@@ -56,6 +56,7 @@ public class TurnLeftThread extends ModuleThread {
 			}
 		} catch (Exception localException) {
 		}
+		MediaPlay.getInstance().play("finish.wav");
 		this.window.remove(this);
 		if (!this.isBreakFlag) {
 			judge();
@@ -66,6 +67,7 @@ public class TurnLeftThread extends ModuleThread {
 	}
 
 	public void execute() {
+		System.out.println("开灯时间---------------------------"+this.turnLightTime);
 		JudgeSignal carSignal = JudgeSignal.getInstance();
 		this.curRange += Tools.getDistinceByOBDV(carSignal.gpsspeed, 200);
 		this.curspeed = carSignal.gpsspeed;
@@ -90,23 +92,26 @@ public class TurnLeftThread extends ModuleThread {
 				this.iState = 3;
 				if (!this.turnleft) {
 					if ((!ConfigManager.turnLeft.isOpen())
-							|| (this.turnleft_30205))
-						break;
-					this.turnleft_30205 = true;
-					sendMessage("30205", 15);
+							&& (!this.turnleft_30205))
+					{
+						this.turnleft_30205 = true;
+						sendMessage("30205", 15);
+					}
 				} else {
-					if ((this.turnLightTime >= ConfigManager.commonConfig
+					if ((this.turnLightTime < ConfigManager.commonConfig
 							.getTurnLightWaitTime())
-							|| (!ConfigManager.turnLeft.isOpen())
-							|| (this.turnleft_30206))
-						break;
-					this.turnleft_30206 = true;
-					sendMessage("30206", 15);
+							&&(ConfigManager.turnLeft.isOpen())
+							&& (!this.turnleft_30206))
+					{
+						this.turnleft_30206 = true;
+						sendMessage("30206", 15);
+					}
 				}
 			} else if (this.turnLightTime >= ConfigManager.commonConfig
 					.getTurnLightWaitTime()) {
 				this.iState = 2;
 			} else if (carSignal.lamp_left) {
+				this.turnleft_30205 = true;
 				this.turnleft = true;
 				this.turnLightTime += 200;
 				this.lightOffStartTime = 0L;
@@ -138,18 +143,18 @@ public class TurnLeftThread extends ModuleThread {
 		if (this.curspeed > ConfigManager.turnLeft.getMaxSpeed()) {
 			sendMessage("40801", 15);
 		} else if ((ConfigManager.autoJadge.isNeedBrake()) && (!this.isBreak)) {
-			sendMessage("40801", 15);
+			//sendMessage("40801", 15);
 		}
-		if (ConfigManager.addClass.isYkms()) {
-			if ((!this.drive_41605) && (this.lastHightLight)) {
-				this.drive_41605 = true;
-				sendMessage("41605", 13);
-			}
-			if ((!this.drive_41603)
-					&& ((!this.isOpenHighLight) || (!this.isNearLight))) {
-				this.drive_41603 = true;
-				sendMessage("41603", 13);
-			}
-		}
+//		if (ConfigManager.addClass.isYkms()) {
+//			if ((!this.drive_41605) && (this.lastHightLight)) {
+//				this.drive_41605 = true;
+//				sendMessage("41605", 13);
+//			}
+//			if ((!this.drive_41603)
+//					&& ((!this.isOpenHighLight) || (!this.isNearLight))) {
+//				this.drive_41603 = true;
+//				sendMessage("41603", 13);
+//			}
+//		}
 	}
 }

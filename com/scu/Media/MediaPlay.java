@@ -10,7 +10,9 @@
 /* 11 */   private AudioClip clip = null;
 /* 12 */   private String mp3rootpath = "";
 /*    */ 
-/* 14 */   private MediaPlay() { this.mp3rootpath =  "./mp3/"; }
+/* 14 */   private MediaPlay() {
+		this.mp3rootpath =  "./mp3/";
+		}
 /*    */ 
 /*    */   public static MediaPlay getInstance() {
 /* 17 */     if (instance == null)
@@ -20,6 +22,7 @@
 /*    */ 
 /*    */   public void play(String mp3file)
 /*    */   {
+			System.out.println("mpsfile-------------------"+mp3file);
 /*    */     try {
 /* 25 */       if (this.clip != null)
 /* 26 */         this.clip.stop();
@@ -34,8 +37,3 @@
 /*    */     }
 /*    */   }
 /*    */ }
-
-/* Location:           E:\合合集团\新版程序\新建文件夹\
- * Qualified Name:     com.hstech.media.MediaPlay
- * JD-Core Version:    0.6.0
- */

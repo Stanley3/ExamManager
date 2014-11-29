@@ -48,16 +48,16 @@ public class SignalReaderThread extends Thread {
 				this.signalReader.throwError();
 			}
 			if (count > 0) {
-				 try {
-				 signalCode = new String(buffer, 0, count, "UTF-8");
-				 } catch (UnsupportedEncodingException e) {
-				 System.err.println("指定的编码格式错误");
-				 this.signalReader.throwError();
-				 return ;
-				 }
-//				for (int i = 0; i < count; ++i) {
-//					signalCode += convertToString(buffer[i]);
-//				}
+//				 try {
+//				 signalCode = new String(buffer, 0, count, "UTF-8");
+//				 } catch (UnsupportedEncodingException e) {
+//				 System.err.println("指定的编码格式错误");
+//				 this.signalReader.throwError();
+//				 return ;
+//				 }
+				for (int i = 0; i < count; ++i) {
+					signalCode += convertToString(buffer[i]);
+				}
 				String tmpSignal = signalCode;
 				judgeCode(tmpSignal);
 				signalCode = "";
@@ -130,7 +130,11 @@ public class SignalReaderThread extends Thread {
 		else if (code.equalsIgnoreCase(Signal.REARBUMPER))
 			js.signal_rearbumper = true;
 		else if (code.equalsIgnoreCase(Signal.HOOTER))
+		{
 			js.signal_horn = true;
+			js.hornCount++;
+			System.out.println(js.hornCount);
+		}
 		else if (code.equalsIgnoreCase(Signal.OFF))
 			js.signal_off = true;
 		else if (code.equalsIgnoreCase(Signal.SEATBELT))

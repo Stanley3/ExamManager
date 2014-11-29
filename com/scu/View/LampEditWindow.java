@@ -217,8 +217,8 @@ public class LampEditWindow extends ExamWindow {
 		this.type_Model = new lamptypeTable_Model(this.lamptypelist);
 		this.lamptypeTable = new LampTypeJTable(this.type_Model);
 
-		this.lamptypeTable
-				.setPreferredSize(new Dimension(panel.getWidth(), 400));
+//		this.lamptypeTable
+//				.setPreferredSize(new Dimension(panel.getWidth(), 400));
 		this.lamptypeTable.hideHeader();
 		this.lamptypeTable.setFont(new Font("ËÎÌו", Font.PLAIN, 12));
 		this.lamptypeTable.setRowHeight(25);

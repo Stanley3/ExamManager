@@ -6,8 +6,14 @@ import com.scu.Utils.*;
 import com.scu.Media.MediaPlay;
 import com.scu.Model.ExamWindow;
 
-public class GearThread extends ModuleThread {
+public class NewGearThread extends ModuleThread {
 	boolean erDangFalg=false;	
+	/* 程序执行状�?状�?标示，初始�?设为-1 */
+	private int iState = -1;
+	/* 车辆运行档位和�?度不匹配 */
+	private boolean gear_40402 = false;
+	/* 未按指令进行加减当操�?*/
+	private boolean gear_40401 = false;
 	/* 不匹�?*/
 	private boolean noMatch = false;
 	/* 不匹配时�?*/
@@ -19,16 +25,18 @@ public class GearThread extends ModuleThread {
 	public static double RANGETIGGER = ConfigManager.plusSubstractDang
 			.getTriggerDistance();
 	/* 程序�?��执行时的时间 */
+	private long timer = System.currentTimeMillis();
 	public static int INTCZ = 3000;
 	/* 下一档位 */
 	private int nextGear = 0;
-	/* 加减档标示，判断当前是在加档还是在减档操作 1 是加档；2是减档*/
+	/* 加减档标示，判断当前是在加档还是在减档操�?1 是加档；2是减�?*/
 	private int addordecflag = 1;
-	private int lastDang = 0;
+	private boolean ismatch = false;
 	/* 匹配 */
 	double curspeed = 0.0D;
 	private boolean flag=true;//标记是否为刚刚进行评判
-	public GearThread(ExamWindow window, int moduleFlag) {
+	private int state;
+	public NewGearThread(ExamWindow window, int moduleFlag) {
 		super(window, moduleFlag);
 		this.jsfs = ConfigManager.plusSubstractDang.getTimeOrDistance();// StaticVariable.CARPARM_BUS_JSFS;
 		this.dRangeOut = ConfigManager.plusSubstractDang.getEndDistance();// StaticVariable.CARPARM_BUS_JSJL;
@@ -38,16 +46,16 @@ public class GearThread extends ModuleThread {
 
 	public synchronized void run() {
 		try {
-			// 加减档操作
-			play("train_jjdcz.wav");
+			// 加减档操�?
+			play("jjdcz.wav");
 			Thread.sleep(3000);
-//			while(!erDangFalg&&!isOut())
-//			{
-//				play("jjd_add2.wav");
-//				Thread.sleep(3000);
-//					erDangFalg=true;
-//			}
-			this.addordecflag = 2;
+			while(!erDangFalg&&!isOut())
+			{
+				play("jjd_add2.wav");
+				Thread.sleep(3000);
+					erDangFalg=true;
+			}
+			this.addordecflag = 1;
 			this.nextGear = 2;//将下�?��位置�?
 			this.isPause = false;
 			while (this.runFlag)
@@ -63,7 +71,7 @@ public class GearThread extends ModuleThread {
 				}
 		} catch (Exception localException) {
 		}
-		MediaPlay.getInstance().play("finish.wav");
+		MediaPlay.getInstance().play("end_jjdcz.wav");
 		this.window.remove(this);
 		if (!this.isBreakFlag) {
 			// 是否线程运行被阻�?
@@ -93,84 +101,84 @@ public class GearThread extends ModuleThread {
 		int curGear = JudgeSignal.getInstance().gear;
 		if (JudgeSignal.getInstance().signal_clutchpedal)// 离合器信�?
 			this.iGear = curGear;
-//		/* 按照当前档位进行判断是否和当前�?度匹�?*/
-//		switch (this.iGear) {
-//		case 1:
-//			if (this.curspeed <= ConfigManager.plusSubstractDang.getMaxDang1())
-//				break;
-//			this.noMatch = true;
-//			break;
-//		case 2:
-//			if (this.curspeed <= ConfigManager.plusSubstractDang.getMaxDang2())
-//				break;
-//			this.noMatch = true;
-//			break;
-//		case 3:
-//			if ((this.curspeed <= ConfigManager.plusSubstractDang.getMaxDang3())
-//					&& (this.curspeed >= ConfigManager.plusSubstractDang
-//							.getMinDang3()))
-//				break;
-//			this.noMatch = true;
-//			break;
-//		}
-//		/*
-//		 * 判断不匹配时间是否在允许范围之内 StaticVariable.CARPARM_GOLBAL_DDGZSKFSJ ==20
-//		 */
-//		if ((ConfigManager.plusSubstractDang.isOpen())
-//				&& ((System.currentTimeMillis() - this.noMatchTime)  > ConfigManager.addClass
-//						.getCARPARM_GOLBAL_DDGZSKFSJ()) && (this.noMatch)) {
-//			this.noMatchTime = System.currentTimeMillis();
-//			this.noMatch = false;
-//			sendMessage("40402", 14);
-//		}
-//      /*更改后的程序*/
+		/* 按照当前档位进行判断是否和当前�?度匹�?*/
+		switch (this.iGear) {
+		case 1:
+			if (this.curspeed <= ConfigManager.plusSubstractDang.getMaxDang1())
+				break;
+			this.noMatch = true;
+			break;
+		case 2:
+			if (this.curspeed <= ConfigManager.plusSubstractDang.getMaxDang2())
+				break;
+			this.noMatch = true;
+			break;
+		case 3:
+			if ((this.curspeed <= ConfigManager.plusSubstractDang.getMaxDang3())
+					&& (this.curspeed >= ConfigManager.plusSubstractDang
+							.getMinDang3()))
+				break;
+			this.noMatch = true;
+			break;
+		case 4:
+			if (this.curspeed >= ConfigManager.plusSubstractDang.getMinDang4())
+				break;
+			this.noMatch = true;
+			break;
+		case 5:
+			if (this.curspeed >= ConfigManager.plusSubstractDang.getMinDang5())
+				break;
+			this.noMatch = true;
+			break;
+		}
+		/*
+		 * 判断不匹配时间是否在允许范围之内 StaticVariable.CARPARM_GOLBAL_DDGZSKFSJ ==20
+		 */
+		if ((ConfigManager.plusSubstractDang.isOpen())
+				&& ((System.currentTimeMillis() - this.noMatchTime)  > ConfigManager.addClass
+						.getCARPARM_GOLBAL_DDGZSKFSJ()) && (this.noMatch)) {
+			this.noMatchTime = System.currentTimeMillis();
+			this.noMatch = false;
+			sendMessage("40402", 14);
+		}
+      /*更改后的程序*/
 		if(this.iGear==this.nextGear)
 		{
-			switch(this.iGear)
+			switch(this.state)
 			{
 			case 1:
-				if(this.addordecflag == 1)
-				{
-					try {
-						Thread.sleep(3000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					play("jjd_add2.wav");
-					this.nextGear = 2;
-					this.addordecflag = 1;
-				}
-				break;
-			case 2:
-				if(lastDang == 3) //是二档且上一次的档位是三档时退出
-				{
-					this.runFlag = false;
+					play("jjd_dec1.wav");// 加到san档
+					this.nextGear = 1;
 					break;
-				}
+			case 2:
 				if(this.addordecflag==1)
 				{
-					play("jjd_add3.wav");// 加到san档
+					play("jjd_add4.wav");// 加到4�?
+					this.nextGear = 4;
+					this.addordecflag = 1;
+					break;
+				}
+				else
+				{
+					play("jjd_dec2.wav");// 减到�?��
+					this.nextGear = 2;
+					this.addordecflag = 2;
+					break;
+				}
+				
+			case 4:
+				if(this.addordecflag==1)
+				{
+					play("jjd_dec3.wav");// 加到二档
 					this.nextGear = 3;
 					this.addordecflag = 2;
 					break;
 				}
 				else
 				{
-					play("jjd_dec1.wav");
-					this.nextGear = 1;
-					this.addordecflag = 1;
 					break;
 				}
-			case 3:
-				if(this.addordecflag == 2)
-				{
-					play("jjd_dec2.wav");// 减到�?��
-					this.nextGear = 2;
-					this.addordecflag = 2;
-				}
-				break;
 			}
-			lastDang = this.iGear; //保留上一次的档位，退出时判断使用
 		}
 	}
 	private void play(String mp3) {
@@ -179,7 +187,7 @@ public class GearThread extends ModuleThread {
 	public void judge() {
 		if (!ConfigManager.plusSubstractDang.isOpen())
 			return;
-//		if (this.iGear!=2)// 未按指令平稳加减档操�?iState == 4从头到尾按顺序执�?
-//			sendMessage("40401", 14);
+		if (this.iGear != 2||!erDangFalg)// 未按指令平稳加减档操�?iState == 4从头到尾按顺序执�?
+			sendMessage("40401", 14);
 	}
 }

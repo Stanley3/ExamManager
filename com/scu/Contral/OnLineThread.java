@@ -31,7 +31,7 @@ public class OnLineThread extends ModuleThread {
 
 	public synchronized void run() {
 		try {
-			MediaPlay.getInstance().play("zxxs.wav");
+			MediaPlay.getInstance().play("train_zxxs.wav");
 			Thread curt = Thread.currentThread();
 			// Log.debug("直线行驶线程被唤�?);
 			this.isPause = false;
@@ -50,7 +50,7 @@ public class OnLineThread extends ModuleThread {
 			}
 		} catch (Exception localException) {
 		}
-		MediaPlay.getInstance().play("zxxs_finish.wav");
+		MediaPlay.getInstance().play("finish.wav");
 		this.window.remove(this);
 		if (!this.isBreakFlag) {
 			judge();

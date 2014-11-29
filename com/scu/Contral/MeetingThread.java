@@ -48,7 +48,7 @@ public class MeetingThread extends ModuleThread {
 	/*     */
 	public synchronized void run() {
 		try {
-			MediaPlay.getInstance().play("hc150.wav");
+			MediaPlay.getInstance().play("train_hc.wav");
 			this.isPause = false;
 			this.startTime = System.currentTimeMillis();
 			while (this.runFlag)
@@ -64,6 +64,7 @@ public class MeetingThread extends ModuleThread {
 				}
 		} catch (Exception localException) {
 		}
+		MediaPlay.getInstance().play("finish.wav");
 		this.window.remove(this);
 		if (!this.isBreakFlag) {
 			judge();
@@ -116,11 +117,10 @@ public class MeetingThread extends ModuleThread {
 		if (this.csbd) {
 			sendMessage("41301", 9);
 		}
-		/* 是否�?��刹车 */
-		else if ((ConfigManager.autoJadge.isNeedBrake())
-				&& (!this.breakFlag)) {
-			sendMessage("41301", 9);
-		}
+//		else if ((ConfigManager.autoJadge.isNeedBrake())
+//				&& (!this.breakFlag)) {
+//			sendMessage("41301", 9);
+//		}
 		/* 通过路口时使用灯 */
 //		if (ConfigManager.addClass.isYkms()) {
 //			if ((!this.drive_41605) && (this.lastHightLight)) {

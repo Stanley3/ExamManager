@@ -25,7 +25,7 @@ public class AddClass {
 	//发动机的最高速度没有该信号默认为零
 		public  int SPEED_ENGINE_HIGH=0;
 	//如果灯关闭时间大于系统预设时间则将开灯时间重置为0
-	private long lightOffTime=1000;
+	private long lightOffTime=2000;
 	//发动机低速不匹配持续时间（暂无配置）
 	public  int CARPARM_GOLBAL_KDHX=5;
 	private long CARPARM_GOLBAL_DDGZSKFSJ=20000;

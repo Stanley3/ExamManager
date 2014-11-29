@@ -1,9 +1,7 @@
 package com.scu.Contral;
 import com.scu.Signal.*;
-import com.scu.Utils.DBHelper;
 import com.scu.Utils.*;
 import com.scu.Model.ExamWindow;
-
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
@@ -37,6 +35,8 @@ public class NightLightThread extends ModuleThread implements
 	private int waitTime = 5000;
 	private int lamp_onbeamCount=0;
 	private int lamp_offbeamCount=0;
+	private boolean urgentFlag=false;
+	private long urgentStratTime=0;
 	public NightLightThread(ExamWindow window, int moduleFlag) {
 		super(window, moduleFlag);
 		this.mp3rootpath = "./mp3/";
@@ -187,13 +187,13 @@ public class NightLightThread extends ModuleThread implements
 		case 1://�?��灯光考试
 			if ((this.curCarSignal == null) || (this.lastCarSignal == null)) {
 				/* 不能正确�?��灯光 */
-				sendMessage("41601", 41);
+//				sendMessage("41601", 41);
 			}
 			else
 			{
 				if(!this.curCarSignal.lamp_near)
 				{
-					sendMessage("41601", 41);
+//					sendMessage("41601", 41);
 				}
 			}
 			break;
@@ -229,15 +229,69 @@ public class NightLightThread extends ModuleThread implements
 			judgeDooubleSwitch();
 			break;
 		case 11://考试完成
-			if (allLightDown(this.lastCarSignal)) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			if (this.lastCarSignal.lamp_near|| this.lastCarSignal.lamp_highbeam)
 				sendMessage("41601", 41);
-			} 
-			break;
+				break;
 		case 12://照明不良
 			if (!this.lastCarSignal.lamp_highbeam)
 				sendMessage("41609", 41);
 			break;
+		case 13://打开前照灯
+			if(!this.lastCarSignal.lamp_near )
+				sendMessage("41604", 41);
+				break;
+		case 14://打开远光灯灯
+			if(!this.lastCarSignal.lamp_highbeam)
+				sendMessage("41605", 41);
+				break;
+		case 15: //跟车行驶
+			if(!this.lastCarSignal.lamp_near || this.lastCarSignal.lamp_highbeam)
+				sendMessage("41602", 41);
+				break;
+		case 16://窄路会车
+			if (this.lamp_onbeamCount<2||this.lamp_offbeamCount<2) {
+				sendMessage("41607", 13);
+			}
+			this.lamp_onbeamCount=0;
+			this.lamp_offbeamCount=0;
+			break;
+		case 17://通过急弯坡路拱桥
+			judgeDooubleSwitch();
+			break;
+		case 19://发生故障难以移动
+//			try {
+//				Thread.sleep(3000);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+			if(this.urgentStratTime==0)
+			{
+				this.urgentStratTime=System.currentTimeMillis();
+			}
+			if(this.lastCarSignal.lamp_urgent)
+			{
+				this.urgentFlag=true; 
+			}
+			if(System.currentTimeMillis()-this.urgentStratTime>3000 && !this.urgentFlag)
+			{
+				if(this.lastCarSignal.lamp_near || this.lastCarSignal.lamp_highbeam)
+					sendMessage("41610", 41);
+				this.urgentStratTime=0;
+			}
+			
+			break;
+		case 18://照明良好
+			if(!this.lastCarSignal.lamp_near || this.lastCarSignal.lamp_highbeam)
+				sendMessage("41609", 41);
+				break;
 		}
+		
+			
 	}
 	/**
 	 * 判断双闪
@@ -247,6 +301,8 @@ public class NightLightThread extends ModuleThread implements
 		if (this.lamp_onbeamCount<2||this.lamp_offbeamCount<2) {
 			sendMessage("41603", 13);
 		}
+		System.out.println("开---------------"+this.lamp_onbeamCount);
+		System.out.println("关---------------"+this.lamp_offbeamCount);
 		this.lamp_onbeamCount=0;
 		this.lamp_offbeamCount=0;
 	}

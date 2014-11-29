@@ -50,7 +50,7 @@ public class ChangeLaneThread extends ModuleThread {
 
 	public synchronized void run() {
 		try {
-			MediaPlay.getInstance().play("bgcd.wav");
+			MediaPlay.getInstance().play("train_bgcd.wav");
 //			this.isPause = true;
 			this.isPause = false;
 			while (this.runFlag) {
@@ -67,6 +67,7 @@ public class ChangeLaneThread extends ModuleThread {
 			}
 		} catch (Exception localException) {
 		}
+		MediaPlay.getInstance().play("finish.wav");
 		/* 从窗口List中移除该线程 */
 		this.window.remove(this);
 		/* 是否有刹车信�?*/
@@ -137,7 +138,7 @@ public class ChangeLaneThread extends ModuleThread {
 				this.changelane_30206 = true;
 				
 				this.iState = 4;
-			} else if (lamb_Left_State) {
+			} else if (!JudgeSignal.getInstance().signal_handbrake&&lamb_Left_State) {
 		//		System.out.println("加灯�?��间：" + this.turnLightTime);
 				this.turnLightTime += 200;
 				this.lightOffStartTime = 0L;
@@ -199,7 +200,7 @@ public class ChangeLaneThread extends ModuleThread {
 		}
 	}
 	public void judge() {
-		if (ConfigManager.changeLane.isOpen())
+		if (!ConfigManager.changeLane.isOpen())
 			return;
 		if (this.changelane_30103)
 			sendMessage("30103", 4);

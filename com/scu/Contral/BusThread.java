@@ -25,7 +25,7 @@ public class BusThread extends ModuleThread {
 
 	public synchronized void run() {
 		try {
-			MediaPlay.getInstance().play("tgggqcz.wav");
+			MediaPlay.getInstance().play("train_ggqcz.wav");
 			/* 是否暂停置为FALSE */
 			this.isPause = false;
 
@@ -43,6 +43,7 @@ public class BusThread extends ModuleThread {
 				}
 		} catch (Exception localException) {
 		}
+		MediaPlay.getInstance().play("finish.wav");
 		this.window.remove(this);
 		if (!this.isBreakFlag) {
 			judge();
@@ -71,9 +72,8 @@ public class BusThread extends ModuleThread {
 		if (!ConfigManager.busStation.isOpen())
 			return;
 		// 判断当前车�?是否大于规定车�?
-		
 		 // 是要求有刹车动作如果没有就不发�?错误信息如果you就发送是要求有刹车动�?
 		 if ((ConfigManager.autoJadge.isNeedBrake()) && (!this.breakFlag))
-			sendMessage("41201", 8);
+			sendMessage("41203", 8);
 	}
 }

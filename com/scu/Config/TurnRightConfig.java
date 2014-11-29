@@ -116,7 +116,7 @@ public class TurnRightConfig extends ConfigFather{
 	return minAngle;
 	}
 	public void setMinAngle(int minAngle) {
-		dbHelper.updateConfig("turnright_cs",minAngle+"");
+		dbHelper.updateConfig("turnright_z",minAngle+"");
 		this.minAngle = minAngle;
 	}
 	

@@ -13,6 +13,10 @@ import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -30,6 +34,7 @@ import com.scu.Thread.GPSThread;
 import com.scu.Thread.SignalReader;
 import com.scu.Utils.AddComponentUtil;
 import com.scu.Utils.GetLocateUtil;
+import com.scu.secreat.MainSecret;
 /**
  * 主窗口 
  * @author 孙晓雨 2014.10.11
@@ -272,6 +277,30 @@ public class MainWindow  extends JFrame{
 	  }
 	//主程序入口
 	public static void main(String[] args) {
+		MainSecret m=new MainSecret();
+		String rightSec= m.test();
+		String filePath="./sc";
+		File file=new File(filePath);
+		if(!file.exists())
+		{
+			System.exit(ERROR);
+		}
+		else
+		{
+			try {
+				BufferedReader br=new BufferedReader(new FileReader(filePath));
+				String line="";
+				line =br.readLine().trim();
+				System.out.println("line---------------"+line);
+				if(line.compareTo(rightSec.trim())!=0)
+				{
+					System.out.println("密码不正确");
+					System.exit(ERROR);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		Font font = new Font("黑体", Font.BOLD, 15);
 		java.util.Enumeration<Object> keys = UIManager.getDefaults().keys();
 		while (keys.hasMoreElements()) {

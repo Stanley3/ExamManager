@@ -103,7 +103,7 @@ public class CommonConfig extends ConfigFather{
 	}
 	public int getExamLength() {
 		String res=super.dbHelper.QureyConfig("golbal_kslc");
-		openTurnLightTime=Integer.parseInt(res);
+		examLength=Integer.parseInt(res);
 		return examLength;
 	}
 	public void setExamLength(int examLength) {
@@ -120,16 +120,21 @@ public class CommonConfig extends ConfigFather{
 		this.maxSpeed = maxSpeed;
 	}
 	public int getDang() {
-		
+		String res=super.dbHelper.QureyConfig("global_maxgare");
+		Dang=Integer.parseInt(res);
 		return Dang;
 	}
-	public void setDang(int dang) {
+	public void setDang(int dang) {//global_maxgare
+		dbHelper.updateConfig("global_maxgare",dang+"");
 		Dang = dang;
 	}
-	public int getSpeedNeed() {
+	public int getSpeedNeed() {//global_maxspeed
+		String res=super.dbHelper.QureyConfig("global_maxspeed");
+		SpeedNeed=Integer.parseInt(res);
 		return SpeedNeed;
 	}
 	public void setSpeedNeed(int speedNeed) {
+		dbHelper.updateConfig("global_maxspeed",speedNeed+"");
 		SpeedNeed = speedNeed;
 	}
 	

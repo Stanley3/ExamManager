@@ -166,6 +166,7 @@ public class LightEditDialog extends JDialog{
 	  }
 
 	  private void init() {
+		  System.out.println("≥ı ºªØ");
 	    DBHelper db = new DBHelper();
 	    try {
 	      db.conn();
@@ -182,7 +183,9 @@ public class LightEditDialog extends JDialog{
 	          this.lampids[idx] = lamp_no;
 	          this.lamptitles[idx] = lamp_title;
 	          idx++;
+	          System.out.println("idx-------------------"+idx);
 	        }
+	      System.out.println("idx-------------------"+idx);
 	      rs.close();
 	    } catch (Exception ex) {
 	      ex.printStackTrace();

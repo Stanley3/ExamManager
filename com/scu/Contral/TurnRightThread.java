@@ -38,7 +38,7 @@ public class TurnRightThread extends ModuleThread {
 
 	public synchronized void run() {
 		try {
-			MediaPlay.getInstance().play("lkyzw.wav");
+			MediaPlay.getInstance().play("train_lkyzw.wav");
 			Thread curt = Thread.currentThread();
 			// Log.debug("路口右转弯线程被唤醒");
 			this.isPause = false;
@@ -56,6 +56,7 @@ public class TurnRightThread extends ModuleThread {
 			}
 		} catch (Exception localException) {
 		}
+		MediaPlay.getInstance().play("finish.wav");
 		this.window.remove(this);
 		if (!this.isBreakFlag) {
 			judge();
@@ -64,7 +65,6 @@ public class TurnRightThread extends ModuleThread {
 			sendEndMessage(16, 1);
 		}
 	}
-
 	public void execute() {
 		JudgeSignal carSignal = JudgeSignal.getInstance();
 		this.curRange += Tools.getDistinceByOBDV(carSignal.gpsspeed, 200);
@@ -94,15 +94,15 @@ public class TurnRightThread extends ModuleThread {
 					this.turnright_30205 = true;
 					sendMessage("30205", 16);
 				} else {
-					if ((this.turnLightTime >= ConfigManager.commonConfig
+					if ((this.turnLightTime < ConfigManager.commonConfig
 							.getTurnLightWaitTime())
-							|| (!ConfigManager.turnRight.isOpen())
-							|| (this.turnright_30206))
-						break;
-					this.turnright_30206 = true;
-					sendMessage("30206", 16);
+							&& (ConfigManager.turnRight.isOpen())
+							&& (!this.turnright_30206))
+					{
+						this.turnright_30206 = true;
+						sendMessage("30206", 16);
+					}
 				}
-
 			} else if (this.turnLightTime >= ConfigManager.commonConfig
 					.getTurnLightWaitTime()) {
 				this.iState = 2;
@@ -118,20 +118,16 @@ public class TurnRightThread extends ModuleThread {
 				else {
 					this.turnLightTime += 200;
 				}
-
 			}
-
 			break;
 		case 2:
 			if (this.turnAngle <= MAX_ANGLE)
 				break;
 			this.iState = 3;
 			this.runFlag = false;
-
 			break;
 		}
 	}
-
 	public void judge() {
 		if (!ConfigManager.turnRight.isOpen())
 			return;
@@ -141,7 +137,7 @@ public class TurnRightThread extends ModuleThread {
 		if (this.curspeed > ConfigManager.turnRight.getMaxSpeed()) {
 			sendMessage("40901", 16);
 		} else if ((ConfigManager.autoJadge.isNeedBrake()) && (!this.isBreak)) {
-			sendMessage("40901", 16);
+			//sendMessage("40901", 16);
 		}
 //		if (ConfigManager.addClass.isYkms()) {
 //			if ((!this.drive_41605) && (this.lastHightLight)) {

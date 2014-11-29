@@ -49,7 +49,7 @@ public class OverTakenThread extends ModuleThread {
 
 	public synchronized void run() {
 		try {
-			MediaPlay.getInstance().play("cc.wav");
+			MediaPlay.getInstance().play("train_cc.wav");
 			this.isPause = false;
 			while (this.runFlag) {
 				try {
@@ -65,6 +65,7 @@ public class OverTakenThread extends ModuleThread {
 			}
 		} catch (Exception localException) {
 		}
+		MediaPlay.getInstance().play("finish.wav");
 		this.window.remove(this);
 		if (!this.isBreakFlag) {
 			judge();
@@ -79,7 +80,7 @@ public class OverTakenThread extends ModuleThread {
 		this.curRange += Tools.getDistinceByOBDV(carSignal.gpsspeed, 200);
 		/***
 		 * 
-		 * 怎么判断左转还是右转
+		 * 判断左转还是右转
 		 */
 		if(startAngle==0.0D)
 		{
@@ -174,7 +175,7 @@ public class OverTakenThread extends ModuleThread {
 			if (this.cxsj >= ZXCXSJ)
 			{
 				this.iState = 5;
-				MediaPlay.getInstance().play("cc_shycd.wav");
+				//MediaPlay.getInstance().play("cc_shycd.wav");
 				// 请驾驶回原车�?
 			}
 			break;

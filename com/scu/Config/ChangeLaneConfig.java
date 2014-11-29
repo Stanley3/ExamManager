@@ -115,11 +115,12 @@ public class ChangeLaneConfig extends ConfigFather{
 		this.offsetAngle = offsetAngle;
 	}
 	public int getChangeLaneLength() {
-		String res=super.dbHelper.QureyConfig("changelane_lxbd");	
-		return Integer.parseInt(res);
+		String res=super.dbHelper.QureyConfig("changelane_lxbd");
+		this.changeLaneLength = Integer.parseInt(res);
+		return this.changeLaneLength;
 	}
 	public void setChangeLaneLength(int changeLaneLength) {
-		dbHelper.updateConfig("changelane_bgcdzjd",changeLaneLength+"");
+		dbHelper.updateConfig("changelane_lxbd",changeLaneLength+"");
 		this.changeLaneLength = changeLaneLength;
 	}
 	

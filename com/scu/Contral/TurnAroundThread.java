@@ -19,6 +19,7 @@ public class TurnAroundThread extends ModuleThread {
 	private long lightOffStartTime = 0L;
 	private int startAngle;
 	private int endAngle;
+	private boolean laba=false;
 	int angle;
 	// 达标角度
 	private static double MAX_ANGLE = ConfigManager.turnRound.getEnoughAngle();
@@ -36,7 +37,7 @@ public class TurnAroundThread extends ModuleThread {
 
 	public synchronized void run() {
 		try {
-			MediaPlay.getInstance().play("dt.wav");
+			MediaPlay.getInstance().play("train_dt.wav");
 			Thread curt = Thread.currentThread();
 			this.isPause = false;
 			while (this.runFlag) {
@@ -53,6 +54,7 @@ public class TurnAroundThread extends ModuleThread {
 			}
 		} catch (Exception localException) {
 		}
+		MediaPlay.getInstance().play("finish.wav");
 		this.window.remove(this);
 		if (!this.isBreakFlag) {
 			judge();
@@ -74,6 +76,10 @@ public class TurnAroundThread extends ModuleThread {
 		else if (angle < -180)
 			angle += 360;
 		this.turnAngle = Math.abs(angle);
+		if(JudgeSignal.getInstance().signal_horn)
+		{
+			this.laba=true;
+		}
 		switch (this.iState) {
 		case 1:
 			if (this.turnAngle > 30) {
@@ -109,6 +115,10 @@ public class TurnAroundThread extends ModuleThread {
 	}
 
 	public void judge() {
+		if(!this.laba)
+		{
+			sendMessage("41505", 12);
+		}
 		if (!ConfigManager.turnRound.isOpen())
 			return;
 		if (this.iState != 3) {

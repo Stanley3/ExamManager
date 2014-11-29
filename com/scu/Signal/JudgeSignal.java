@@ -125,11 +125,15 @@ public class JudgeSignal
    /**
     * 车辆的速度值，单位米每秒(m/s)
     */
-   public double gpsspeed = 0.0D;
+   public int gpsspeed = 0;
    /**
     * 发动机的转速，暂获取不到该值，默认为0
     */
    public int n = 0;
+   /**
+    * 接收到喇叭信号的次数，使用后请手动清零   
+    */
+   public int hornCount = 0;
    public long sigLastUpdate;
  
    private JudgeSignal()
@@ -139,7 +143,7 @@ public class JudgeSignal
      this.lon = 0.0D;
      this.lat = 0.0D;
      this.gpsangle = 0;
-     this.gpsspeed = 0.0D;
+     this.gpsspeed = 0;
      this.n = 0;
      this.sigLastUpdate = System.currentTimeMillis();
    }

@@ -165,6 +165,7 @@ public class LightListDialog extends JDialog {
 					this.lamptitles[idx] = lamp_title;
 					idx++;
 				}
+			System.out.println("idx------------->"+idx++);
 			rs.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();

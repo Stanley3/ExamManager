@@ -28,7 +28,8 @@ public class PrepareThread extends ModuleThread {
 
 	public synchronized void run() {
 		try {
-		//	if (this.moduleFlag == ModuleThread.TRAINFLAG)
+			MediaPlay.getInstance().play("jjkslk.wav");
+			Thread.sleep(10000);
 			MediaPlay.getInstance().play("sczb.wav");
 			Thread curt = Thread.currentThread();
 			this.isPause = false;
@@ -45,6 +46,12 @@ public class PrepareThread extends ModuleThread {
 				}
 		} catch (Exception localException) {
 		}
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		MediaPlay.getInstance().play("finish.wav");
 		this.window.remove(this);
 		if (!this.isBreakFlag) {
 			judge();

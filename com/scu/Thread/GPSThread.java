@@ -128,7 +128,7 @@ public class GPSThread extends Thread {
 			}
 			JudgeSignal.getInstance().lon = Double.valueOf(data[5].trim()) / 100.0; // 经度，默认为东经
 			JudgeSignal.getInstance().lat = Double.valueOf(data[3].trim()) / 100.0; // 纬度，默认为北纬
-			JudgeSignal.getInstance().gpsspeed = Double.valueOf(data[7]) * 1.852; // 速度，单位km/h
+			JudgeSignal.getInstance().gpsspeed = (int) (Double.valueOf(data[7]) * 1.852); // 速度，单位km/h
 			// JudgeSignal.getInstance().gpsspeed = Double.valueOf(data[7]) *
 			// 0.5144444 * 3.6;
 			if (!data[8].isEmpty())

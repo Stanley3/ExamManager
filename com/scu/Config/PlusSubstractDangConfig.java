@@ -134,7 +134,7 @@ public class PlusSubstractDangConfig extends ConfigFather{
 	}
 	public int getMinDang3() {
 		String res=super.dbHelper.QureyConfig("golbal_ddgs3");
-		MaxDang3=Integer.parseInt(res);
+		MinDang3=Integer.parseInt(res);
 		return MinDang3;
 	}
 	public void setMinDang3(int minDang3) {

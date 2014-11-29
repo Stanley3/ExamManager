@@ -245,7 +245,7 @@ public class GolbalExamThread extends ModuleThread {
 			this.turnlightOffStartTime = 0L;
 			// 如果灯开启时间大�?S
 			if (this.turnLightTime >= ConfigManager.commonConfig
-					.getTurnLightWaitTime()) {
+					.getTurnLightWaitTime()&&!this.turnLight3S) {
 				this.turnLight3S = true;
 				this.turnLight3SEndTime = System.currentTimeMillis();
 			}
@@ -260,9 +260,9 @@ public class GolbalExamThread extends ModuleThread {
 				this.turnLightTime += 200L;
 			}
 			//--------------------------------------------------------
-			if (this.turnLightTime >=  ConfigManager.commonConfig.getOpenTurnLightTime()) {
-				sendMessage("30206", 20);
-				this.turnLight3S = false;
+			if (this.turnLightTime >=  ConfigManager.commonConfig.getOpenTurnLightTime()&&!this.turnLight3S) {
+				//sendMessage("30206", 20);
+				this.turnLight3S = true;
 			}
 		}
 		//-----------------------------------------------------------
@@ -301,10 +301,17 @@ public class GolbalExamThread extends ModuleThread {
 
 	public void judge() {
 		/* 不按规定使用安全带或者安全头�?*/
-		if ((!this.drive_30101) && (this.carSignal.signal_seatbelt)) {
-			this.drive_30101 = true;
-			sendMessage("30101", 20);
+		if(super.moduleFlag==1){
+			if ((!this.drive_30101) && (this.carSignal.signal_seatbelt)) {
+				this.drive_30101 = true;
+				sendMessage("30101", 20);
+			}
 		}
+		else
+		{
+			
+		}
+		
 		// 行驶中空挡滑�?
 		if ((!this.drive_30112) && (this.noGear)) {
 			this.drive_30112 = true;

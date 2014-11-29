@@ -110,7 +110,7 @@ public class PullOverConfig extends ConfigFather{
 	}
 	public int getOffsetAngle() {
 		String res=super.dbHelper.QureyConfig("stop_kbqfxdjd");
-		triggerDistance=Integer.parseInt(res);
+		offsetAngle=Integer.parseInt(res);
 		return offsetAngle;
 	}
 	public void setOffsetAngle(int offsetAngle) {
